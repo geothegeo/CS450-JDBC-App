@@ -7,37 +7,33 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <style>
       body {
-        padding: 50px;
+        padding: 5vh 5vw 5vh 75vw;
       }
-
     </style>
   </head>
   <!-- <%@ page import="java.util.Date" %> -->
   <body>
     <form id="filterForm" method="post" action="">
-      <div class="form-group col-xs-2">
+      <div class="form-group">
         <label for="author">Author: </label>
         <input type="text" class="form-control" id="author" name="author">
       </div>
       <div class="form-group">
-        <div class="col-xs-2">
-          <label for="title">Title: </label>
-          <input type="text" class="form-control" id="title" name="title">
-        </div>
-
+        <label for="title">Title: </label>
+        <input type="text" class="form-control" id="title" name="title">
       </div>
-      <div class="form-group" class="col-xs-2">
+      <div class="form-group">
         <label for="year">Year: </label>
         <input type="text" class="form-control" id="year" name="year">
       </div>
-      <div class="form-group" class="col-xs-2">
+      <div class="form-group">
         <label for="type">Type: </label>
         <select id="type" class="form-control">
           <option value="short" selected>short</option>
           <option value="long">long</option>
         </select>
       </div>
-      <div class="form-group" class="col-xs-2">
+      <div class="form-group">
         <label for="sort">Sorted By: </label>
         <select id="sort" class="form-control">
           <option value="author" selected>author of publication</option>
@@ -45,7 +41,7 @@
           <option value="year">year of publication</option>
         </select>
       </div>
-      <div class="form-group" class="col-xs-2">
+      <div class="form-group">
         <label for="limit">Record Per page: </label>
         <select id="limit" class="form-control">
           <option value="10" selected>10</option>
@@ -53,17 +49,17 @@
           <option value="50">50</option>
         </select>
       </div>
-      <button onclick="window.location.assign(servletURL+'/search');">Search </button>
+      <button class="btn btn-primary" onclick="window.location.assign(servletURL+'/search');">Search </button>
     </form>
     <br>
     <p> OR </p>
     <br>
     <form id="filterForm" method="post" action="">
-      <div class="form-group" class="col-xs-2">
+      <div class="form-group">
         <label for="pubId">Enter PublicationID: </label>
         <input type="text" class="form-control" id="pubId" name="pubId">
       </div>
-      <button onclick="window.location.assign(servletURL+'/search');">Search </button>
+      <button class="btn btn-primary" onclick="window.location.assign(servletURL+'/search');">Search </button>
     </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
