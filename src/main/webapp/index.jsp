@@ -8,35 +8,33 @@
     <style>
       body {
         padding: 5vh 75vw 5vh 5vw;
-      }
-      .form-group {
-        display: inline;
+        background-color: rgb(175, 175, 175);
       }
     </style>
   </head>
   <!-- <%@ page import="java.util.Date" %> -->
   <body>
     <form id="filterForm" method="post" action="">
-      <div class="form-group">
+      <div class="form-group form-inline">
         <label for="author">Author: </label>
         <input type="text" class="form-control" id="author" name="author">
       </div>
-      <div class="form-group">
+      <div class="form-group form-inline">
         <label for="title">Title: </label>
         <input type="text" class="form-control" id="title" name="title">
       </div>
-      <div class="form-group">
+      <div class="form-group form-inline">
         <label for="year">Year: </label>
         <input type="text" class="form-control" id="year" name="year">
       </div>
-      <div class="form-group">
+      <div class="form-group form-inline">
         <label for="type">Type: </label>
         <select id="type" class="form-control">
           <option value="short" selected>short</option>
           <option value="long">long</option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="form-group form-inline">
         <label for="sort">Sorted By: </label>
         <select id="sort" class="form-control">
           <option value="author" selected>author of publication</option>
@@ -44,7 +42,7 @@
           <option value="year">year of publication</option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="form-group form-inline">
         <label for="limit">Record Per page: </label>
         <select id="limit" class="form-control">
           <option value="10" selected>10</option>
@@ -58,7 +56,7 @@
     <p> OR </p>
     <br>
     <form id="filterForm" method="post" action="">
-      <div class="form-group">
+      <div class="form-group form-inline">
         <label for="pubId">Enter PublicationID: </label>
         <input type="text" class="form-control" id="pubId" name="pubId">
       </div>
