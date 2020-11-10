@@ -8,7 +8,10 @@
     <style>
       body {
         padding: 5vh 75vw 5vh 5vw;
-        background-color: rgb(175, 175, 175);
+        background-color: rgb(216, 216, 216);
+      }
+      label {
+        margin-right: 10px;
       }
     </style>
   </head>
@@ -55,7 +58,7 @@
     <br>
     <p> OR </p>
     <br>
-    <form id="filterForm" method="post" action="">
+    <form id="idForm" method="post" action="">
       <div class="form-group form-inline">
         <label for="pubId">Enter PublicationID: </label>
         <input type="text" class="form-control" id="pubId" name="pubId">
