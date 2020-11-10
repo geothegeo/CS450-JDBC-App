@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <style>
       body {
-        padding: 5vh 5vw 5vh 75vw;
+        padding: 5vh 75vw 5vh 5vw;
+      }
+      .form-group {
+        display: inline;
       }
     </style>
   </head>
