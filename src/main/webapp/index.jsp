@@ -15,13 +15,16 @@
   <!-- <%@ page import="java.util.Date" %> -->
   <body>
     <form id="filterForm" method="post" action="">
-      <div class="form-group" class="col-xs-2">
+      <div class="form-group col-xs-2">
         <label for="author">Author: </label>
         <input type="text" class="form-control" id="author" name="author">
       </div>
-      <div class="form-group" class="col-xs-2">
-        <label for="title">Title: </label>
-        <input type="text" class="form-control" id="title" name="title">
+      <div class="form-group">
+        <div class="col-xs-2">
+          <label for="title">Title: </label>
+          <input type="text" class="form-control" id="title" name="title">
+        </div>
+
       </div>
       <div class="form-group" class="col-xs-2">
         <label for="year">Year: </label>
