@@ -142,6 +142,23 @@ public class DBJCServlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 
+		printHead(out);
+
+		out.println("<body>");
+		out.println("<p>");
+		out.println("Use the back button to go back to the main page.");
+		out.println("</p>");
+
+		out.println(out, printTable("SELECT * FROM authors"));
+
+		out.println("</body>");
+		out.println("");
+		out.println("</html>");
+
+
+	}
+
+   private void printHead (PrintWriter out) {
 		out.println("<html>");
 		out.println("");
 		out.println("<head>");
@@ -155,41 +172,26 @@ public class DBJCServlet extends HttpServlet {
 		out.println(" <script src=\"" + BJS2 + "\"></script>");
 		out.println(" <script src=\"" + BJS3 + "\"></script>");
 		out.println("</head>");
-
-		out.println("<body>");
-		out.println("<p>");
-		out.println("Use the back button to go back to the main page.");
-		out.println("</p>");
-
-		out.println(printTable("SELECT * FROM authors"));
-
-		out.println("</body>");
-		out.println("");
-		out.println("</html>");
-
-		// try{
-		// rs.close();
-		// stmt.close();
-		// } catch(SQLException e) {
-		// 	System.out.println(e.getMessage());
-		// }
 	}
 
-	private String printTable(String sqlString) {
+	private void printTable(PrintWriter out, String sqlString) {
 		
-		String result = "";
-		// String sql = "SELECT * FROM authors";
 		try (ResultSet rs = stmt.executeQuery(sqlString)) {
 			while (rs.next()) {
-				result = rs.getString("publicationID") + "\t" + 
-							rs.getString("author") + "\n";
+				out.println(rs.getString("publicationID") + "\t" + 
+						rs.getString("author") + "\n");
 			}
 		} 
 		catch (SQLException ex) {
-			result = ex.getMessage();
+			out.println(ex.getMessage());
 		}
 
-		return result;
+		try {
+			rs.close();
+			stmt.close();
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
 
 	}
 }
