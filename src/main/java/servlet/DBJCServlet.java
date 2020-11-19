@@ -123,18 +123,19 @@ public class DBJCServlet extends HttpServlet {
   public void doGet (HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException
   {
-	String sql = "SELECT * FROM authors";
-	ResultSet rs = stmt.executeQuery(sql);
-
     response.setContentType("text/html");
     PrintWriter out = response.getWriter();
     PrintHead(out);
     PrintBody(out);
+
+	 	String sql = "SELECT * FROM authors";
+		ResultSet rs = stmt.executeQuery(sql);
 		while (rs.next()) {
 		out.println(rs.getString("publicationID") + "\t" + 
 								rs.getString("author"));
 		out.println("\n");
 		}
+		
     PrintTail(out);
   }
 
