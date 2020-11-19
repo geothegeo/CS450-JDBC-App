@@ -121,13 +121,54 @@ public class DBJCServlet extends HttpServlet {
 
   @Override
   public void doGet (HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException
-  {
+    throws ServletException, IOException {
     response.setContentType("text/html");
     PrintWriter out = response.getWriter();
-   //  PrintHead(out);
-   //  PrintBody(out);
+    PrintHead(out);
+    PrintBody(out);
 
+   //   out.println("<html>");
+   //   out.println("");
+   //   out.println("<head>");
+   //   out.println("<title>JBDC Results Table</title>");
+   //   out.println(" <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+   //   out.println(" <link rel=\"stylesheet\" href=\"" + Style1 + "\">");
+   //   out.println(" <link rel=\"stylesheet\" href=\"" + Style2 + "\">");
+   //   out.println(" <link rel=\"stylesheet\" href=\"" + Style3 + "\">");
+
+   //   out.println(" <script src=\"" + BJS1 + "\"></script>");
+   //   out.println(" <script src=\"" + BJS2 + "\"></script>");
+   //   out.println(" <script src=\"" + BJS3 + "\"></script>");
+
+   //   out.println("</head>");
+   //   out.println("");
+
+   //  out.println("<body>");
+   //  out.println("<p>");
+   //  out.println("Use the back button to go back to the main page.");
+   //  out.println("</p>");
+
+	// 		String sql = "SELECT * FROM authors";
+	// 		try (ResultSet rs = stmt.executeQuery(sql)) {
+	// 			while (rs.next()) {
+	// 				out.println(rs.getString("publicationID") + "\t" + 
+	// 										rs.getString("author"));
+	// 				out.println("\n");
+	// 			}
+	// 	   } 
+	// 		catch (SQLException ex) {
+   //          System.out.println(ex.getMessage());
+   //       }
+
+	//   out.println("</body>");
+   //   out.println("");
+   //   out.println("</html>");
+
+
+    PrintTail(out);
+  }
+
+  private void printHead (PrintWriter out) {
      out.println("<html>");
      out.println("");
      out.println("<head>");
@@ -143,56 +184,16 @@ public class DBJCServlet extends HttpServlet {
 
      out.println("</head>");
      out.println("");
-
-    out.println("<body>");
-    out.println("<p>");
-    out.println("Use the back button to go back to the main page.");
-    out.println("</p>");
-
-			String sql = "SELECT * FROM authors";
-			try (ResultSet rs = stmt.executeQuery(sql)) {
-				while (rs.next()) {
-					out.println(rs.getString("publicationID") + "\t" + 
-											rs.getString("author"));
-					out.println("\n");
-				}
-		   } 
-			catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-         }
-
-	  out.println("</body>");
-     out.println("");
-     out.println("</html>");
-   //  PrintTail(out);
   }
 
-  private void printHead (PrintWriter out){
-     out.println("<html>");
-     out.println("");
-     out.println("<head>");
-     out.println("<title>JBDC Results Table</title>");
-     out.println(" <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
-     out.println(" <link rel=\"stylesheet\" href=\"" + Style1 + "\">");
-     out.println(" <link rel=\"stylesheet\" href=\"" + Style2 + "\">");
-     out.println(" <link rel=\"stylesheet\" href=\"" + Style3 + "\">");
-
-     out.println(" <script src=\"" + BJS1 + "\"></script>");
-     out.println(" <script src=\"" + BJS2 + "\"></script>");
-     out.println(" <script src=\"" + BJS3 + "\"></script>");
-
-     out.println("</head>");
-     out.println("");
-  }
-
-  private void printBody (PrintWriter out){
+  private void printBody (PrintWriter out) {
     out.println("<body>");
     out.println("<p>");
     out.println("Use the back button to go back to the main page.");
     out.println("</p>");
   }
 
-  private void printTail (PrintWriter out){
+  private void printTail (PrintWriter out) {
 	  out.println("</body>");
      out.println("");
      out.println("</html>");
