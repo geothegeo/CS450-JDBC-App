@@ -177,6 +177,7 @@ public class DBJCServlet extends HttpServlet {
 
 	private String printTable(String sqlString) {
 		
+		String result = "";
 		// String sql = "SELECT * FROM authors";
 		try (ResultSet rs = stmt.executeQuery(sqlString)) {
 			while (rs.next()) {
@@ -188,7 +189,7 @@ public class DBJCServlet extends HttpServlet {
 			result = ex.getMessage();
 		}
 
-		return 
+		return result;
 
 	}
 }
