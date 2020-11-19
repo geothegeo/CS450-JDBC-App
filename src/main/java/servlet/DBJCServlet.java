@@ -138,18 +138,18 @@ public class DBJCServlet extends HttpServlet {
 
   }
 
-//   @Override
-//   public void doGet (HttpServletRequest request, HttpServletResponse response)
-// 		throws ServletException, IOException {
-// 		response.setContentType("text/html");
-// 		PrintWriter out = response.getWriter();
+  @Override
+  public void doGet (HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
 
-// 		String sqlString = "SELECT * FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
+		String sqlString = "SELECT * FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 
-// 		printHead(out);
-// 		printBody(out, sqlString);
-// 		printTail(out);
-// 	}
+		printHead(out);
+		printBody(out, sqlString);
+		printTail(out);
+	}
 
    private void printHead (PrintWriter out) {
 		out.println("<html>");
