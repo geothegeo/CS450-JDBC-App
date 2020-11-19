@@ -83,8 +83,8 @@ public class DBJCServlet extends HttpServlet {
    	String iId = request.getParameter("pubId");
 		if ((iId != null) && (iId.length() > 0)) {
 			id = iId;
-			sqlString += " WHERE p.PublicationID = '" + id + "'";
-			sqlString += " GROUP BY p.PublicationID";
+			sqlString += " AND p.PublicationID = '" + id + "'";
+			sqlString += " GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 		}			
 		else {
 			String iAuthor = request.getParameter("author");
@@ -92,28 +92,28 @@ public class DBJCServlet extends HttpServlet {
 				author = iAuthor;
 				sqlString = "SELECT p.PublicationID, Title, Author, Year, Type, Summary, URL " +
 								"FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
-				sqlString += " WHERE Author = '" + author + "'";
+				sqlString += " AND Author = '" + author + "'";
 			}
 				
 			String iTitle = request.getParameter("title");
 			if ((iTitle != null) && (iTitle.length() > 0)) {
 				title = iTitle;
-				sqlString += " WHERE Title = '" + title + "'";
+				sqlString += " AND Title = '" + title + "'";
 			}
 				
 			String iYear = request.getParameter("year");
 			if ((iYear != null) && (iYear.length() > 0)) {
 				year = iYear;	
-				sqlString += " WHERE Year = '" + year + "'";
+				sqlString += " AND Year = '" + year + "'";
 			}
 
 			String iType = request.getParameter("type");
 			if ((iType != null) && (iType.length() > 0)) {
 				type = iType;	
-				sqlString += " WHERE Type = '" + type + "'";
+				sqlString += " AND Type = '" + type + "'";
 			}
 						
-			sqlString += " GROUP BY p.PublicationID";
+			sqlString += " GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 
 			String iSort = request.getParameter("sort");
 			if ((iSort != null) && (iSort.length() > 0)) {
@@ -192,7 +192,7 @@ public class DBJCServlet extends HttpServlet {
 			out.println("<thead><tr>");
 			out.println("<th scope=\"col\">ID</th>");
 			out.println("<th scope=\"col\">Title</th>");
-			out.println("<th scope=\"col\">Author</th>");
+			out.println("<th scope=\"col\">Author(s)</th>");
 			out.println("<th scope=\"col\">Year</th>");
 			out.println("<th scope=\"col\">Type</th>");
 			out.println("<th scope=\"col\">Summary</th>");
@@ -205,7 +205,6 @@ public class DBJCServlet extends HttpServlet {
 				out.println("<tr>");
 				out.println("<td>" + rs.getString("publicationID") + "</td>");
 				out.println("<td>" + rs.getString("title") + "</td>");
-				// out.println("<td>" + rs.getString("author") + "</td>");
 				out.println("<td>" + rs.getString("Authors") + "</td>");
 				out.println("<td>" + rs.getString("year") + "</td>");
 				out.println("<td>" + rs.getString("type") + "</td>");
