@@ -143,19 +143,8 @@ public class DBJCServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		printHead(out);
-
-		out.println("<body>");
-		out.println("<p>");
-		out.println("Use the back button to go back to the main page.");
-		out.println("</p>");
-
-		printTable(out, "SELECT * FROM authors");
-
-		out.println("</body>");
-		out.println("");
-		out.println("</html>");
-
-
+		printBody(out);
+		printTail(out);
 	}
 
    private void printHead (PrintWriter out) {
@@ -167,12 +156,26 @@ public class DBJCServlet extends HttpServlet {
 		out.println(" <link rel=\"stylesheet\" href=\"" + Style1 + "\">");
 		out.println(" <link rel=\"stylesheet\" href=\"" + Style2 + "\">");
 		out.println(" <link rel=\"stylesheet\" href=\"" + Style3 + "\">");
+		out.println("</head>");
+	}
 
+	private void printBody (PrintWriter out) {
+		out.println("<body>");
+		out.println("<p>");
+		out.println("Use the back button to go back to the main page.");
+		out.println("</p>");
+		printTable(out, "SELECT * FROM authors");
+		out.println("</body>");
+	}
+
+	private void printTail (PrintWriter out) {
+		out.println("");
 		out.println(" <script src=\"" + BJS1 + "\"></script>");
 		out.println(" <script src=\"" + BJS2 + "\"></script>");
 		out.println(" <script src=\"" + BJS3 + "\"></script>");
-		out.println("</head>");
+		out.println("</html>");
 	}
+
 
 	private void printTable(PrintWriter out, String sqlString) {
 		
