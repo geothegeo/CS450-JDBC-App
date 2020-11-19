@@ -145,7 +145,7 @@ public class DBJCServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(DISTINCT Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
-									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID GROUP BY Title";
+									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 
 		printHead(out);
 		printBody(out, sqlString);
@@ -168,6 +168,9 @@ public class DBJCServlet extends HttpServlet {
 		out.println("<body>");
 		out.println("<p>");
 		out.println("Use the back button to go back to the main page.");
+		out.println("</p>");
+		out.println("<p>");
+		out.println(sqlString);
 		out.println("</p>");
 		printTable(out, sqlString);
 		out.println("</body>");
