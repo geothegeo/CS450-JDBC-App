@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <style>
       body {
-        padding: 5vh 75vw 5vh 5vw;
+        padding: 5vh 70vw 5vh 5vw;
         background-color: rgb(216, 216, 216);
       }
       label {

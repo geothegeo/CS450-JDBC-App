@@ -21,6 +21,10 @@ import java.sql.*;
 
 @WebServlet(name = "DBJC", urlPatterns = {"/search"})
 public class DBJCServlet extends HttpServlet {
+  static String Domain  = "https://cs450-jdbc.herokuapp.com/";
+  static String Path    = "";
+  static String Servlet = "search";
+
     private Statement stmt;
     private Connection conn;
 
@@ -126,13 +130,13 @@ public class DBJCServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
     PrintHead(out);
     PrintBody(out);
-	while (rs.next()) {
-	System.out.println(rs.getString("publicationID") + "\t" + 
-							rs.getString("author"));
-		
-	}
+		while (rs.next()) {
+		out.println(rs.getString("publicationID") + "\t" + 
+								rs.getString("author"));
+		out.println("\n");
+		}
     PrintTail(out);
-  } // End doGet
+  }
 
   private void printHead (PrintWriter out){
      out.println("<html>");
