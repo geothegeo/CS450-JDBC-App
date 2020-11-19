@@ -68,8 +68,6 @@ public class DBJCServlet extends HttpServlet {
   public void doPost (HttpServletRequest request, HttpServletResponse response)
      throws ServletException, IOException
   {
-	   Boolean givesId = false;
-		// Boolean givesAuthor = false;
 		String sqlString = "SELECT p.PublicationID, Title, GROUP_CONCAT(DISTINCT Author ORDER BY Author ASC SEPARATOR ', ') AS Authors, " +
 									"Year, Type, Summary, URL FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 
@@ -85,8 +83,8 @@ public class DBJCServlet extends HttpServlet {
    	String iId = request.getParameter("pubId");
 		if ((iId != null) && (iId.length() > 0)) {
 			id = iId;
-			givesId = true;
 			sqlString += " WHERE p.PublicationID = '" + id + "'";
+			sqlString += " GROUP BY p.PublicationID";
 		}			
 		else {
 			String iAuthor = request.getParameter("author");
@@ -114,12 +112,6 @@ public class DBJCServlet extends HttpServlet {
 				type = iType;	
 				sqlString += " WHERE Type = '" + type + "'";
 			}
-
-			// if (givesAuthor)
-			// 	sqlString += " GROUP BY p.PublicationID";
-			// else	
-			// 	sqlString += " GROUP BY p.PublicationID";
-
 						
 			sqlString += " GROUP BY p.PublicationID";
 
