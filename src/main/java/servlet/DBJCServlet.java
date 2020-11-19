@@ -167,12 +167,12 @@ public class DBJCServlet extends HttpServlet {
 		out.println("");
 		out.println("</html>");
 
-		try{
-		rs.close();
-		stmt.close();
-		} catch(SQLException e) {
-			System.out.println(e.getMessage());
-		}
+		// try{
+		// rs.close();
+		// stmt.close();
+		// } catch(SQLException e) {
+		// 	System.out.println(e.getMessage());
+		// }
 	}
 
 	private String printTable(String sqlString) {
@@ -180,14 +180,15 @@ public class DBJCServlet extends HttpServlet {
 		// String sql = "SELECT * FROM authors";
 		try (ResultSet rs = stmt.executeQuery(sqlString)) {
 			while (rs.next()) {
-				out.println(rs.getString("publicationID") + "\t" + 
-								rs.getString("author"));
-				out.println("\n");
+				result = rs.getString("publicationID") + "\t" + 
+							rs.getString("author") + "\n";
 			}
 		} 
 		catch (SQLException ex) {
-			System.out.println(ex.getMessage());
+			result = ex.getMessage();
 		}
+
+		return 
 
 	}
 }
