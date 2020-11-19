@@ -145,7 +145,7 @@ public class DBJCServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		String sqlString = "SELECT p.PublicationID, Title, GROUP_CONCAT(DISTINCT Author ORDER BY Author ASC SEPARATOR ', ') AS Authors, " +
-									"Year, Type, Summary, URL FROM Authors a, Publications p WHERE a.publicationID = p.publicationID;
+									"Year, Type, Summary, URL FROM Authors a, Publications p WHERE a.publicationID = p.publicationID GROUP BY Title";
 
 		printHead(out);
 		printBody(out, sqlString);
