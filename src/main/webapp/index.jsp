@@ -17,7 +17,7 @@
   </head>
   <!-- <%@ page import="java.util.Date" %> -->
   <body>
-    <form id="filterForm" method="post" action="">
+    <form id="filterForm" method="post" action="https://cs450-jdbc.herokuapp.com/search">
       <div class="form-group form-inline">
         <label for="author">Author: </label>
         <input type="text" class="form-control" id="author" name="author">
@@ -54,18 +54,18 @@
         </select>
       </div>
       <!-- <input type="hidden" id="searchById" name="searchById" value="0"> -->
-      <button class="btn btn-primary" onclick="window.location.assign(servletURL+'/search');">Search </button>
+      <button class="btn btn-primary">Search </button>
     </form>
     <br>
     <p> OR </p>
     <br>
-    <form id="idForm" method="post" action="">
+    <form id="idForm" method="post" action="https://cs450-jdbc.herokuapp.com/search">
       <div class="form-group form-inline">
         <label for="pubId">Enter PublicationID: </label>
         <input type="text" class="form-control" id="pubId" name="pubId">
       </div>
       <!-- <input type="hidden" id="searchById" name="searchById" value="1"> -->
-      <button class="btn btn-primary" onclick="window.location.assign(servletURL+'/search');">Search </button>
+      <button class="btn btn-primary">Search </button>
     </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

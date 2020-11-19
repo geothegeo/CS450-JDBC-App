@@ -68,9 +68,13 @@ public class DBJCServlet extends HttpServlet {
   public void doPost (HttpServletRequest request, HttpServletResponse response)
      throws ServletException, IOException
   {
+
+
+
+
 	   Boolean givesId = false;
-		String sqlString = "SELECT p.PublicationID, p.Title, a.Author, p.Year, p.Type, p.Summary, p.URL " + 
-									"FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
+		String sqlString = "SELECT p.PublicationID, Title, GROUP_CONCAT(DISTINCT Author ORDER BY Author ASC SEPARATOR ', ') AS 'Authors', " +
+									"Year, Type, Summary, URL FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 	  	String id = null;
 		String author = null;
 		String title = null;
@@ -182,7 +186,7 @@ public class DBJCServlet extends HttpServlet {
 		try (ResultSet rs = stmt.executeQuery(sqlString)) {
 			out.println("<table class=\"table\">");
 			out.println("<thead><tr>");
-			out.println("<th scope=\"col\">Publication ID</th>");
+			out.println("<th scope=\"col\">ID</th>");
 			out.println("<th scope=\"col\">Title</th>");
 			out.println("<th scope=\"col\">Author</th>");
 			out.println("<th scope=\"col\">Year</th>");
@@ -197,11 +201,11 @@ public class DBJCServlet extends HttpServlet {
 				out.println("<tr>");
 				out.println("<td>" + rs.getString("publicationID") + "</td>");
 				out.println("<td>" + rs.getString("title") + "</td>");
-				out.println("<td>" + rs.getString("author") + "</td>");
+				out.println("<td>" + rs.getString("authors") + "</td>");
 				out.println("<td>" + rs.getString("year") + "</td>");
 				out.println("<td>" + rs.getString("type") + "</td>");
 				out.println("<td>" + rs.getString("summary") + "</td>");
-				out.println("<td><a href= '" + rs.getString("url") + "'>Click here to download</a></td>");
+				out.println("<td><a href= '" + rs.getString("url") + "'>Click here to access the article</a></td>");
 				out.println("</tr>");
 			}
 			out.println("</tbody></table>");
