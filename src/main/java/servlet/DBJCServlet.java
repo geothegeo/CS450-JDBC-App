@@ -68,22 +68,22 @@ public class DBJCServlet extends HttpServlet {
   public void doPost (HttpServletRequest request, HttpServletResponse response)
      throws ServletException, IOException
   {
-
-
 	   Boolean givesId = false;
+		String sqlString = "";
 
-	  	String id = "";
-		String author = "";
-		String title = "";
-		String year = "";
-		String type = "";
-		String sort = "";
-		String limit = "";
+	  	String id = null;
+		String author = null;
+		String title = null;
+		String year = null;
+		String type = null;
+		String sort = null;
+		String limit = null;
 
    	String iId = request.getParameter("pubId");
 		if ((iId != null) && (iId.length() > 0)) {
 			id = iId;
 			givesId = true;
+			sqlString = "SELECT ";
 		}			
 		else {
 			String iAuthor = request.getParameter("author");
@@ -109,30 +109,9 @@ public class DBJCServlet extends HttpServlet {
      response.setContentType("text/html");
      PrintWriter out = response.getWriter();
 
-   //   out.println("<html>");
-   //   out.println("");
-   //   out.println("<head>");
-   //   out.println("<title>JBDC Results Table</title>");
-   //   out.println(" <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
-   //   out.println(" <link rel=\"stylesheet\" href=\"" + Style1 + "\">");
-   //   out.println(" <link rel=\"stylesheet\" href=\"" + Style2 + "\">");
-   //   out.println(" <link rel=\"stylesheet\" href=\"" + Style3 + "\">");
-
-   //   out.println(" <script src=\"" + BJS1 + "\"></script>");
-   //   out.println(" <script src=\"" + BJS2 + "\"></script>");
-   //   out.println(" <script src=\"" + BJS3 + "\"></script>");
-   //   out.println("</head>");
-
-	//   out.println("<body>");
-	//   out.println("<p>");
-	//   out.println("Results Table.");
-	//   out.println("</p>");
-
-	//   out.println(printTable("SELECT * FROM authors"));
-
-	//   out.println("</body>");
-   //   out.println("");
-   //   out.println("</html>");
+	  printHead(out);
+	  printBody(out, sqlString);
+	  printTail(out);
 
   }
 
@@ -142,8 +121,10 @@ public class DBJCServlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 
+		String sqlString = "SELECT * FROM Author a, Publications p WHERE a.publicationID = p.publicationID";
+
 		printHead(out);
-		printBody(out);
+		printBody(out, sqlString);
 		printTail(out);
 	}
 
@@ -159,12 +140,12 @@ public class DBJCServlet extends HttpServlet {
 		out.println("</head>");
 	}
 
-	private void printBody (PrintWriter out) {
+	private void printBody (PrintWriter out, String sqlString) {
 		out.println("<body>");
 		out.println("<p>");
 		out.println("Use the back button to go back to the main page.");
 		out.println("</p>");
-		printTable(out, "SELECT * FROM authors");
+		printTable(out, sqlString);
 		out.println("</body>");
 	}
 
