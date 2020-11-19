@@ -68,13 +68,11 @@ public class DBJCServlet extends HttpServlet {
   public void doPost (HttpServletRequest request, HttpServletResponse response)
      throws ServletException, IOException
   {
-
-
-
-
 	   Boolean givesId = false;
-		String sqlString = "SELECT p.PublicationID, Title, GROUP_CONCAT(DISTINCT Author ORDER BY Author ASC SEPARATOR ', ') AS 'Authors', " +
+		// Boolean givesAuthor = false;
+		String sqlString = "SELECT p.PublicationID, Title, GROUP_CONCAT(DISTINCT Author ORDER BY Author ASC SEPARATOR ', ') AS Authors, " +
 									"Year, Type, Summary, URL FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
+
 	  	String id = null;
 		String author = null;
 		String title = null;
@@ -94,6 +92,8 @@ public class DBJCServlet extends HttpServlet {
 			String iAuthor = request.getParameter("author");
 			if ((iAuthor != null) && (iAuthor.length() > 0)) {
 				author = iAuthor;
+				sqlString = "SELECT p.PublicationID, Title, Author, Year, Type, Summary, URL " +
+								"FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 				sqlString += " WHERE Author = '" + author + "'";
 			}
 				
@@ -108,13 +108,21 @@ public class DBJCServlet extends HttpServlet {
 				year = iYear;	
 				sqlString += " WHERE Year = '" + year + "'";
 			}
-						
+
 			String iType = request.getParameter("type");
 			if ((iType != null) && (iType.length() > 0)) {
 				type = iType;	
 				sqlString += " WHERE Type = '" + type + "'";
 			}
+
+			// if (givesAuthor)
+			// 	sqlString += " GROUP BY p.PublicationID";
+			// else	
+			// 	sqlString += " GROUP BY p.PublicationID";
+
 						
+			sqlString += " GROUP BY p.PublicationID";
+
 			String iSort = request.getParameter("sort");
 			if ((iSort != null) && (iSort.length() > 0)) {
 				sort = iSort;	
@@ -129,8 +137,6 @@ public class DBJCServlet extends HttpServlet {
 				
 		}
 
-		sqlString += " GROUP BY p.PublicationID";
-
      response.setContentType("text/html");
      PrintWriter out = response.getWriter();
 
@@ -140,18 +146,18 @@ public class DBJCServlet extends HttpServlet {
 
   }
 
-  @Override
-  public void doGet (HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
+//   @Override
+//   public void doGet (HttpServletRequest request, HttpServletResponse response)
+// 		throws ServletException, IOException {
+// 		response.setContentType("text/html");
+// 		PrintWriter out = response.getWriter();
 
-		String sqlString = "SELECT * FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
+// 		String sqlString = "SELECT * FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 
-		printHead(out);
-		printBody(out, sqlString);
-		printTail(out);
-	}
+// 		printHead(out);
+// 		printBody(out, sqlString);
+// 		printTail(out);
+// 	}
 
    private void printHead (PrintWriter out) {
 		out.println("<html>");
