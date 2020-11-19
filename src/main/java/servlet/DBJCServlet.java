@@ -149,13 +149,17 @@ public class DBJCServlet extends HttpServlet {
     out.println("Use the back button to go back to the main page.");
     out.println("</p>");
 
-	 	String sql = "SELECT * FROM authors";
-		ResultSet rs = stmt.executeQuery(sql);
-		while (rs.next()) {
-		out.println(rs.getString("publicationID") + "\t" + 
-								rs.getString("author"));
-		out.println("\n");
-		}
+			String sql = "SELECT * FROM authors";
+			try (ResultSet rs = stmt.executeQuery(sql)) {
+				while (rs.next()) {
+					out.println(rs.getString("publicationID") + "\t" + 
+											rs.getString("author"));
+					out.println("\n");
+				}
+		   } 
+			catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+         }
 
 	  out.println("</body>");
      out.println("");
