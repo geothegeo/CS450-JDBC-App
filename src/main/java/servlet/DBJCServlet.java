@@ -69,7 +69,8 @@ public class DBJCServlet extends HttpServlet {
      throws ServletException, IOException
   {
 	   Boolean givesId = false;
-		String sqlString = "";
+		String sqlString = "SELECT p.PublicationID, p.Title, a.Author, p.Year, p.Type, p.Summary, p.URL
+									FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 
 	  	String id = null;
 		String author = null;
@@ -77,33 +78,52 @@ public class DBJCServlet extends HttpServlet {
 		String year = null;
 		String type = null;
 		String sort = null;
+		String offset = 0;
 		String limit = null;
 
    	String iId = request.getParameter("pubId");
 		if ((iId != null) && (iId.length() > 0)) {
 			id = iId;
 			givesId = true;
-			sqlString = "SELECT ";
+			sqlString += " WHERE p.PublicationID = '" + id + "'";
 		}			
 		else {
 			String iAuthor = request.getParameter("author");
-			if ((iAuthor != null) && (iAuthor.length() > 0))
+			if ((iAuthor != null) && (iAuthor.length() > 0)) {
 				author = iAuthor;
+				sqlString += " WHERE Author = '" + author + "'";
+			}
+				
 			String iTitle = request.getParameter("title");
-			if ((iTitle != null) && (iTitle.length() > 0))
+			if ((iTitle != null) && (iTitle.length() > 0)) {
 				title = iTitle;
+				sqlString += " WHERE Title = '" + title + "'";
+			}
+				
 			String iYear = request.getParameter("year");
-			if ((iYear != null) && (iYear.length() > 0))
-				year = iYear;			
+			if ((iYear != null) && (iYear.length() > 0)) {
+				year = iYear;	
+				sqlString += " WHERE Year = '" + year + "'";
+			}
+						
 			String iType = request.getParameter("type");
-			if ((iType != null) && (iType.length() > 0))
-				type = iType;			
+			if ((iType != null) && (iType.length() > 0)) {
+				type = iType;	
+				sqlString += " WHERE Type = '" + type + "'";
+			}
+						
 			String iSort = request.getParameter("sort");
-			if ((iSort != null) && (iSort.length() > 0))
-				sort = iSort;		
+			if ((iSort != null) && (iSort.length() > 0)) {
+				sort = iSort;	
+				sqlString += " ORDER BY '" + sort + "'";
+			}
+					
 			String iLimit = request.getParameter("limit");
-			if ((iLimit != null) && (iLimit.length() > 0))
+			if ((iLimit != null) && (iLimit.length() > 0)) {
 				limit = iLimit;
+				sqlString += " LIMIT '" + offset + "', '" + limit + "'";
+			}
+				
 		}
 
      response.setContentType("text/html");
@@ -121,7 +141,7 @@ public class DBJCServlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 
-		String sqlString = "SELECT * FROM Author a, Publications p WHERE a.publicationID = p.publicationID";
+		String sqlString = "SELECT * FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 
 		printHead(out);
 		printBody(out, sqlString);
@@ -161,10 +181,32 @@ public class DBJCServlet extends HttpServlet {
 	private void printTable(PrintWriter out, String sqlString) {
 		
 		try (ResultSet rs = stmt.executeQuery(sqlString)) {
+			out.println("<table class=\"table\">");
+			out.println("<thead><tr>");
+			out.println("<th scope=\"col\">Publication ID</th>");
+			out.println("<th scope=\"col\">Title</th>");
+			out.println("<th scope=\"col\">Author</th>");
+			out.println("<th scope=\"col\">Year</th>");
+			out.println("<th scope=\"col\">Type</th>");
+			out.println("<th scope=\"col\">Summary</th>");
+			out.println("<th scope=\"col\">URL</th>");
+			out.println("</tr></thead>");
+
+			out.println("<tbody>");
 			while (rs.next()) {
-				out.println(rs.getString("publicationID") + "\t" + 
-						rs.getString("author") + "\n");
+			
+				out.println("<tr>");
+				out.println("<td>" + rs.getString("publicationID") + "</td>");
+				out.println("<td>" + rs.getString("title")); + "</td>");
+				out.println("<td>" + rs.getString("author") + "</td>");
+				out.println("<td>" + rs.getString("year") + "</td>");
+				out.println("<td>" + rs.getString("type") + "</td>");
+				out.println("<td>" + rs.getString("summary") + "</td>");
+				out.println("<td><a href= '" + rs.getString("url") + "'>Click here to download</a></td>");
+				out.println("</tr>");
 			}
+			out.println("</tbody></table>");
+
 		} 
 		catch (SQLException ex) {
 			out.println(ex.getMessage());

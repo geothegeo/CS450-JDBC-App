@@ -40,9 +40,9 @@
       <div class="form-group form-inline">
         <label for="sort">Sorted By: </label>
         <select id="sort" class="form-control">
-          <option value="author" selected>author of publication</option>
-          <option value="title">title of publication</option>
-          <option value="year">year of publication</option>
+          <option value="Author" selected>author of publication</option>
+          <option value="Title">title of publication</option>
+          <option value="Year">year of publication</option>
         </select>
       </div>
       <div class="form-group form-inline">
