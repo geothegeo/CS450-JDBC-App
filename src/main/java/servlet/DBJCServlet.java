@@ -20,7 +20,7 @@ import java.sql.*;
 */
 
 @WebServlet(name = "DBJC", urlPatterns = {"/search"})
-public class DBJCServlet extends HttpServlet{
+public class DBJCServlet extends HttpServlet {
     private Statement stmt;
     private Connection conn;
 
@@ -120,7 +120,7 @@ public class DBJCServlet extends HttpServlet{
     throws ServletException, IOException
   {
 	String sql = "SELECT * FROM authors";
-	ResultSet rs    = stmt.executeQuery(sql)
+	ResultSet rs = stmt.executeQuery(sql);
 
     response.setContentType("text/html");
     PrintWriter out = response.getWriter();
@@ -170,7 +170,6 @@ public class DBJCServlet extends HttpServlet{
 	// 		System.out.println(e.getMessage());
 	// 	}
   }
-}
 }
 
 		    
