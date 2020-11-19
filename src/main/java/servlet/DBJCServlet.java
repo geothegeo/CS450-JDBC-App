@@ -105,13 +105,13 @@ public class DBJCServlet extends HttpServlet {
      response.setContentType("text/html");
      PrintWriter out = response.getWriter();
 
-      printHead(out);
-      if(newEntries ==  null){
-      printBody(out, "No entries");
-      }else{
-      printBody(out, entryManager.createRadio(newEntries));
-      }
-      printTail(out);
+      // printHead(out);
+      // if(newEntries ==  null){
+      // printBody(out, "No entries");
+      // }else{
+      // printBody(out, entryManager.createRadio(newEntries));
+      // }
+      // printTail(out);
 
   }
 
