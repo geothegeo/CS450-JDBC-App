@@ -129,6 +129,8 @@ public class DBJCServlet extends HttpServlet {
 				
 		}
 
+		sqlString += " GROUP BY p.PublicationID";
+
      response.setContentType("text/html");
      PrintWriter out = response.getWriter();
 
@@ -201,7 +203,7 @@ public class DBJCServlet extends HttpServlet {
 				out.println("<tr>");
 				out.println("<td>" + rs.getString("publicationID") + "</td>");
 				out.println("<td>" + rs.getString("title") + "</td>");
-				out.println("<td>" + rs.getString("authors") + "</td>");
+				out.println("<td>" + rs.getString("Authors") + "</td>");
 				out.println("<td>" + rs.getString("year") + "</td>");
 				out.println("<td>" + rs.getString("type") + "</td>");
 				out.println("<td>" + rs.getString("summary") + "</td>");
