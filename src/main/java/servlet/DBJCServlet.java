@@ -77,7 +77,7 @@ public class DBJCServlet extends HttpServlet {
 		String year = null;
 		String type = null;
 		String sort = null;
-		Int offset = 0;
+		Integer offset = 0;
 		String limit = null;
 
    	String iId = request.getParameter("pubId");
