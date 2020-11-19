@@ -77,7 +77,7 @@ public class DBJCServlet extends HttpServlet {
 		String year = null;
 		String type = null;
 		String sort = null;
-		String offset = 0;
+		Int offset = 0;
 		String limit = null;
 
    	String iId = request.getParameter("pubId");
@@ -120,7 +120,7 @@ public class DBJCServlet extends HttpServlet {
 			String iLimit = request.getParameter("limit");
 			if ((iLimit != null) && (iLimit.length() > 0)) {
 				limit = iLimit;
-				sqlString += " LIMIT '" + offset + "', '" + limit + "'";
+				sqlString += " LIMIT '" + Integer.toString(offset) + "', '" + limit + "'";
 			}
 				
 		}
