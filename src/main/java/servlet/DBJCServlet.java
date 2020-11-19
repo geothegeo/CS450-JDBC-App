@@ -144,7 +144,8 @@ public class DBJCServlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 
-		String sqlString = "SELECT * FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
+		String sqlString = "SELECT p.PublicationID, Title, GROUP_CONCAT(DISTINCT Author ORDER BY Author ASC SEPARATOR ', ') AS Authors, " +
+									"Year, Type, Summary, URL FROM Authors a, Publications p WHERE a.publicationID = p.publicationID;
 
 		printHead(out);
 		printBody(out, sqlString);
@@ -201,8 +202,8 @@ public class DBJCServlet extends HttpServlet {
 				out.println("<tr>");
 				out.println("<td>" + rs.getString("publicationID") + "</td>");
 				out.println("<td>" + rs.getString("title") + "</td>");
-				out.println("<td>" + rs.getString("author") + "</td>");
-				// out.println("<td>" + rs.getString("Authors") + "</td>");
+				// out.println("<td>" + rs.getString("author") + "</td>");
+				out.println("<td>" + rs.getString("Authors") + "</td>");
 				out.println("<td>" + rs.getString("year") + "</td>");
 				out.println("<td>" + rs.getString("type") + "</td>");
 				out.println("<td>" + rs.getString("summary") + "</td>");
