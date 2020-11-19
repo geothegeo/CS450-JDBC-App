@@ -109,30 +109,30 @@ public class DBJCServlet extends HttpServlet {
      response.setContentType("text/html");
      PrintWriter out = response.getWriter();
 
-     out.println("<html>");
-     out.println("");
-     out.println("<head>");
-     out.println("<title>JBDC Results Table</title>");
-     out.println(" <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
-     out.println(" <link rel=\"stylesheet\" href=\"" + Style1 + "\">");
-     out.println(" <link rel=\"stylesheet\" href=\"" + Style2 + "\">");
-     out.println(" <link rel=\"stylesheet\" href=\"" + Style3 + "\">");
+   //   out.println("<html>");
+   //   out.println("");
+   //   out.println("<head>");
+   //   out.println("<title>JBDC Results Table</title>");
+   //   out.println(" <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+   //   out.println(" <link rel=\"stylesheet\" href=\"" + Style1 + "\">");
+   //   out.println(" <link rel=\"stylesheet\" href=\"" + Style2 + "\">");
+   //   out.println(" <link rel=\"stylesheet\" href=\"" + Style3 + "\">");
 
-     out.println(" <script src=\"" + BJS1 + "\"></script>");
-     out.println(" <script src=\"" + BJS2 + "\"></script>");
-     out.println(" <script src=\"" + BJS3 + "\"></script>");
-     out.println("</head>");
+   //   out.println(" <script src=\"" + BJS1 + "\"></script>");
+   //   out.println(" <script src=\"" + BJS2 + "\"></script>");
+   //   out.println(" <script src=\"" + BJS3 + "\"></script>");
+   //   out.println("</head>");
 
-	  out.println("<body>");
-	  out.println("<p>");
-	  out.println("Results Table.");
-	  out.println("</p>");
+	//   out.println("<body>");
+	//   out.println("<p>");
+	//   out.println("Results Table.");
+	//   out.println("</p>");
 
-	  out.println(printTable("SELECT * FROM authors"));
+	//   out.println(printTable("SELECT * FROM authors"));
 
-	  out.println("</body>");
-     out.println("");
-     out.println("</html>");
+	//   out.println("</body>");
+   //   out.println("");
+   //   out.println("</html>");
 
   }
 
@@ -149,7 +149,7 @@ public class DBJCServlet extends HttpServlet {
 		out.println("Use the back button to go back to the main page.");
 		out.println("</p>");
 
-		out.println(out, printTable("SELECT * FROM authors"));
+		printTable(out, "SELECT * FROM authors"));
 
 		out.println("</body>");
 		out.println("");
@@ -186,12 +186,12 @@ public class DBJCServlet extends HttpServlet {
 			out.println(ex.getMessage());
 		}
 
-		try {
-			rs.close();
-			stmt.close();
-		} catch(SQLException e) {
-			System.out.println(e.getMessage());
-		}
+		// try {
+		// 	rs.close();
+		// 	stmt.close();
+		// } catch(SQLException e) {
+		// 	System.out.println(e.getMessage());
+		// }
 
 	}
 }
