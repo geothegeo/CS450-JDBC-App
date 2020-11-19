@@ -149,7 +149,7 @@ public class DBJCServlet extends HttpServlet {
 		out.println("Use the back button to go back to the main page.");
 		out.println("</p>");
 
-		printTable(out, "SELECT * FROM authors"));
+		printTable(out, "SELECT * FROM authors");
 
 		out.println("</body>");
 		out.println("");
