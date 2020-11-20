@@ -40,7 +40,15 @@ public class DBJCServlet extends HttpServlet {
 	static String BJS2 = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js";
 	static String BJS3 = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js";
 
-
+	private String id = null;
+	private String author = null;
+	private String title = null;
+	private String year = null;
+	private String type = null;
+	private String sort = null;
+	private String offset = "0";
+	private String limit = null;
+	private String interval = null;
 
    public void init (ServletConfig config) throws ServletException {
 		super.init(config);
@@ -71,15 +79,6 @@ public class DBJCServlet extends HttpServlet {
 		String sqlString = "SELECT p.PublicationID, Title, GROUP_CONCAT(DISTINCT Author ORDER BY Author ASC SEPARATOR ', ') AS Authors, " +
 									"Year, Type, Summary, URL FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 
-	  	String id = null;
-		String author = null;
-		String title = null;
-		String year = null;
-		String type = null;
-		String sort = null;
-		Integer offset = 0;
-		String limit = null;
-
    	String iId = request.getParameter("pubId");
 		if ((iId != null) && (iId.length() > 0)) {
 			id = iId;
@@ -92,13 +91,13 @@ public class DBJCServlet extends HttpServlet {
 				author = iAuthor;
 				sqlString = "SELECT p.PublicationID, Title, Author, Year, Type, Summary, URL " +
 								"FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
-				sqlString += " AND Author = '" + author + "'";
+				sqlString += " AND Author LIKE '%" + author + "%'";
 			}
 				
 			String iTitle = request.getParameter("title");
 			if ((iTitle != null) && (iTitle.length() > 0)) {
 				title = iTitle;
-				sqlString += " AND Title = '" + title + "'";
+				sqlString += " AND Title LIKE '%" + title + "%'";
 			}
 				
 			String iYear = request.getParameter("year");
@@ -118,13 +117,18 @@ public class DBJCServlet extends HttpServlet {
 			String iSort = request.getParameter("sort");
 			if ((iSort != null) && (iSort.length() > 0)) {
 				sort = iSort;	
-				sqlString += " ORDER BY '" + sort + "'";
+				sqlString += " ORDER BY " + sort + "";
 			}
 					
 			String iLimit = request.getParameter("limit");
 			if ((iLimit != null) && (iLimit.length() > 0)) {
 				limit = iLimit;
-				sqlString += " LIMIT '" + Integer.toString(offset) + "', '" + limit + "'";
+				String iInterval = request.getParameter("interval");
+				if ((iInterval != null) && (iInterval.length() > 0)) {
+					interval = iInterval;
+					offset = Integer.parseInt(offset) + Integer.parseInt(interval));
+				}
+				sqlString += " LIMIT " + offset + ", " + limit + "";
 			}
 				
 		}
@@ -169,9 +173,34 @@ public class DBJCServlet extends HttpServlet {
 		out.println("<p>");
 		out.println("Use the back button to go back to the main page.");
 		out.println("</p>");
-		out.println("<p>");
-		out.println(sqlString);
-		out.println("</p>");
+		out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\" onsubmit=\"return configForm()\"");
+		out.println("<input type=\"hidden\" id=\"pubId\" name=\"pubId\" value=\"" + id + "\">");
+		out.println("<input type=\"hidden\" id=\"author\" name=\"author\" value=\"" + author + "\">");
+		out.println("<input type=\"hidden\" id=\"title\" name=\"title\" value=\"" + title + "\">");
+		out.println("<input type=\"hidden\" id=\"year\" name=\"year\" value=\"" + year + "\">");
+		out.println("<input type=\"hidden\" id=\"type\" name=\"type\" value=\"" + type + "\">");
+		out.println("<input type=\"hidden\" id=\"sort\" name=\"sort\" value=\"" + sort + "\">");
+		out.println("<input type=\"hidden\" id=\"offset\" name=\"offset\" value=\"" + offset + "\">");
+		out.println("<input type=\"hidden\" id=\"limit\" name=\"limit\" value=\"" + limit + "\">");
+		out.println("<div class=\"container-fluid\"><div class=\"row\">");
+		if (Integer.parseInt(offset) == 0) {
+			out.println("<div class=\"col-md-1\">");
+			out.println("</div>");
+		} else {
+			out.println("<div class=\"col-md-1\">");
+			out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"-" + limit + "\">Previous</button>");
+			out.println("</div>");
+		}
+		if (Integer.parseInt(offset) + Integer.parseInt(limit) > 90) {
+			out.println("<div class=\"col-md-1 offset-md-10\">");
+			out.println("</div>");
+		} else {
+			out.println("<div class=\"col-md-1 offset-md-10\">");
+			out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"+" + limit + "\">Next</button>");
+			out.println("</div>");
+		}
+    	out.println("</div></div>");
+    	out.println("</form>");
 		printTable(out, sqlString);
 		out.println("</body>");
 	}

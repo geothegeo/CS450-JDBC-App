@@ -53,7 +53,6 @@
           <option value="50">50</option>
         </select>
       </div>
-      <!-- <input type="hidden" id="searchById" name="searchById" value="0"> -->
       <button class="btn btn-primary">Search </button>
     </form>
     <br>
@@ -64,7 +63,6 @@
         <label for="pubId">Enter PublicationID: </label>
         <input type="text" class="form-control" id="pubId" name="pubId">
       </div>
-      <!-- <input type="hidden" id="searchById" name="searchById" value="1"> -->
       <button class="btn btn-primary">Search </button>
     </form>
 
