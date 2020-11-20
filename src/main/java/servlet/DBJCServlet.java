@@ -194,8 +194,7 @@ public class DBJCServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
-									" FROM Authors a, Publications p WHERE a.PublicationID = p.PublicationID AND p.PublicationID = '1'" +
-									" GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";		
+									" FROM Authors a, Publications p WHERE a.PublicationID = p.PublicationID GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";		
 		printHead(out);
 		printBody(out, sqlString);
 		printTail(out);
@@ -216,14 +215,14 @@ public class DBJCServlet extends HttpServlet {
 	private void printBody (PrintWriter out, String sqlString) {
 		out.println("<body>");
 		out.println("<h2>DBJC Results Table:</h2>");
-		out.println("<p>Please use the back button to go back to the main page and refresh the page before doing another query.</p>");
-		out.println("<p>" + sqlString + "</p>");
+		// out.println("<p>" + sqlString + "</p>");
 		if(Integer.parseInt(numRows) == 0) {
 			out.println("<p>There are no results to be returned.</p>");
 		} else {
 			out.println("<p>" + numRows + " rows returned.</p>");
 			out.println("<p>Displaying results: " + (Integer.parseInt(offset) + 1) + " - ");
 			out.println(Math.min(Integer.parseInt(offset) + Integer.parseInt(limit), Integer.parseInt(numRows)) + "</p>");
+			// If no publicationID, then display previous and next buttons for the limit queries
 			if(!((id != null) && (id.length() > 0))) {
 				out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
 				if(author != null)
@@ -262,9 +261,9 @@ public class DBJCServlet extends HttpServlet {
 				out.println("</div></div>");
 				out.println("</form>");
 			}
-			out.println("<p>givesAuthor: " + givesAuthor + ", firstSet: " + firstSet + ", id: " + id + ", author: " + author 
-						+ ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
-						+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
+			// out.println("<p>givesAuthor: " + givesAuthor + ", firstSet: " + firstSet + ", id: " + id + ", author: " + author 
+			// 			+ ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
+			// 			+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
 			printTable(out, sqlString);
 		}
 		
