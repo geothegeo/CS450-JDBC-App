@@ -218,50 +218,55 @@ public class DBJCServlet extends HttpServlet {
 		out.println("<h2>DBJC Results Table:</h2>");
 		out.println("<p>Please use the back button to go back to the main page and refresh the page before doing another query.</p>");
 		out.println("<p>" + sqlString + "</p>");
-		out.println("<p>" + numRows + " rows returned.</p>");
-		out.println("<p>Displaying results: " + (Integer.parseInt(offset) + 1) + " - ");
-		out.println(Math.min(Integer.parseInt(offset) + Integer.parseInt(limit), Integer.parseInt(numRows)) + "</p>");
-		if(!((id != null) && (id.length() > 0))) {
-			out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
-			if(author != null)
-				out.println("<input type=\"hidden\" id=\"author\" name=\"author\" value=\"" + author + "\">");
-			if(title != null)	
-				out.println("<input type=\"hidden\" id=\"title\" name=\"title\" value=\"" + title + "\">");
-			if(year != null)
-				out.println("<input type=\"hidden\" id=\"year\" name=\"year\" value=\"" + year + "\">");
-			out.println("<input type=\"hidden\" id=\"type\" name=\"type\" value=\"" + type + "\">");
-			out.println("<input type=\"hidden\" id=\"sort\" name=\"sort\" value=\"" + sort + "\">");
-			
-			out.println("<input type=\"hidden\" id=\"offset\" name=\"offset\" value=\"" + offset + "\">");
-			out.println("<input type=\"hidden\" id=\"limit\" name=\"limit\" value=\"" + limit + "\">");
-			out.println("<input type=\"hidden\" id=\"nRows\" name=\"nRows\" value=\"" + numRows + "\">");
+		if(numRows == 0) {
+			out.println("<p>There are no results to be returned.</p>");
+		} else {
+			out.println("<p>" + numRows + " rows returned.</p>");
+			out.println("<p>Displaying results: " + (Integer.parseInt(offset) + 1) + " - ");
+			out.println(Math.min(Integer.parseInt(offset) + Integer.parseInt(limit), Integer.parseInt(numRows)) + "</p>");
+			if(!((id != null) && (id.length() > 0))) {
+				out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
+				if(author != null)
+					out.println("<input type=\"hidden\" id=\"author\" name=\"author\" value=\"" + author + "\">");
+				if(title != null)	
+					out.println("<input type=\"hidden\" id=\"title\" name=\"title\" value=\"" + title + "\">");
+				if(year != null)
+					out.println("<input type=\"hidden\" id=\"year\" name=\"year\" value=\"" + year + "\">");
+				out.println("<input type=\"hidden\" id=\"type\" name=\"type\" value=\"" + type + "\">");
+				out.println("<input type=\"hidden\" id=\"sort\" name=\"sort\" value=\"" + sort + "\">");
+				
+				out.println("<input type=\"hidden\" id=\"offset\" name=\"offset\" value=\"" + offset + "\">");
+				out.println("<input type=\"hidden\" id=\"limit\" name=\"limit\" value=\"" + limit + "\">");
+				out.println("<input type=\"hidden\" id=\"nRows\" name=\"nRows\" value=\"" + numRows + "\">");
 
-			out.println("<input type=\"hidden\" id=\"bAuthor\" name=\"bAuthor\" value=\"" + Integer.toString(givesAuthor)  + "\">");
-			out.println("<input type=\"hidden\" id=\"bSet\" name=\"bSet\" value=\"" + Integer.toString(firstSet) + "\">");
+				out.println("<input type=\"hidden\" id=\"bAuthor\" name=\"bAuthor\" value=\"" + Integer.toString(givesAuthor)  + "\">");
+				out.println("<input type=\"hidden\" id=\"bSet\" name=\"bSet\" value=\"" + Integer.toString(firstSet) + "\">");
 
-			out.println("<div class=\"container-fluid\"><div class=\"row\">");
-			if (Integer.parseInt(offset) == 0) {
-				out.println("<div class=\"col-md-1\">");
-				out.println("</div>");
-			} else {
-				out.println("<div class=\"col-md-1\">");
-				out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"-" + limit + "\">Previous</button>");
-				out.println("</div>");
+				out.println("<div class=\"container-fluid\"><div class=\"row\">");
+				if (Integer.parseInt(offset) == 0) {
+					out.println("<div class=\"col-md-1\">");
+					out.println("</div>");
+				} else {
+					out.println("<div class=\"col-md-1\">");
+					out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"-" + limit + "\">Previous</button>");
+					out.println("</div>");
+				}
+				if ((Integer.parseInt(offset) + Integer.parseInt(limit)) >= Integer.parseInt(numRows)) {
+					out.println("<div class=\"col-md-1 offset-md-10\">");
+					out.println("</div>");
+				} else {
+					out.println("<div class=\"col-md-1 offset-md-10\">");
+					out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"+" + limit + "\">Next</button>");
+					out.println("</div>");
+				}
+				out.println("</div></div>");
+				out.println("</form>");
 			}
-			if ((Integer.parseInt(offset) + Integer.parseInt(limit)) >= Integer.parseInt(numRows)) {
-				out.println("<div class=\"col-md-1 offset-md-10\">");
-				out.println("</div>");
-			} else {
-				out.println("<div class=\"col-md-1 offset-md-10\">");
-				out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"+" + limit + "\">Next</button>");
-				out.println("</div>");
-			}
-			out.println("</div></div>");
-			out.println("</form>");
+			out.println("<p>id: " + id + ", author: " + author + ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
+						+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
+			printTable(out, sqlString);
 		}
-		out.println("<p>id: " + id + ", author: " + author + ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
-					+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
-		printTable(out, sqlString);
+		
 		out.println("</body>");
 	}
 
