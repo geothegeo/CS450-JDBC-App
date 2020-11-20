@@ -221,9 +221,12 @@ public class DBJCServlet extends HttpServlet {
 		out.println(Math.min(Integer.parseInt(offset) + Integer.parseInt(limit), Integer.parseInt(numRows)) + "</p>");
 		if(!((id != null) && (id.length() > 0))) {
 			out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
-			out.println("<input type=\"hidden\" id=\"author\" name=\"author\" value=\"" + author + "\">");
-			out.println("<input type=\"hidden\" id=\"title\" name=\"title\" value=\"" + title + "\">");
-			out.println("<input type=\"hidden\" id=\"year\" name=\"year\" value=\"" + year + "\">");
+			if(author != null)
+				out.println("<input type=\"hidden\" id=\"author\" name=\"author\" value=\"" + author + "\">");
+			if(title != null)	
+				out.println("<input type=\"hidden\" id=\"title\" name=\"title\" value=\"" + title + "\">");
+			if(year != null)
+				out.println("<input type=\"hidden\" id=\"year\" name=\"year\" value=\"" + year + "\">");
 			out.println("<input type=\"hidden\" id=\"type\" name=\"type\" value=\"" + type + "\">");
 			out.println("<input type=\"hidden\" id=\"sort\" name=\"sort\" value=\"" + sort + "\">");
 			
