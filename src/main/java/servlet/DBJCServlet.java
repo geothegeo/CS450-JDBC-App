@@ -42,6 +42,7 @@ public class DBJCServlet extends HttpServlet {
 
 	private Boolean givesId = true;
 	private Boolean givesAuthor = false;
+
 	private String id = null;
 	private String author = null;
 	private String title = null;
@@ -51,6 +52,7 @@ public class DBJCServlet extends HttpServlet {
 	private String offset = "0";
 	private String limit = null;
 	private String interval = null;
+	private String numRows = "0";
 
    public void init (ServletConfig config) throws ServletException {
 		super.init(config);
@@ -137,6 +139,11 @@ public class DBJCServlet extends HttpServlet {
 				}
 				sqlString += " LIMIT " + offset + ", " + limit + "";
 			}
+
+			String iNumRows = request.getParameter("nRows");
+			if ((iNumRows != null) && (iNumRows.length() > 0)) {
+				numRows = iNumRows;	
+			}
 				
 		}
 
@@ -158,8 +165,8 @@ public class DBJCServlet extends HttpServlet {
 		// String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
 		// 							" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND Year = '2017' GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
-									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND Year = '2017' AND Type = 'short'" +
-									" GROUP BY Title, Type, Summary, ORDER BY Authors LIMIT 0, 10";
+									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND Type = 'long'" +
+									" GROUP BY Title, Type, Summary ORDER BY Authors LIMIT 0, 10";
 		
 		printHead(out);
 		printBody(out, sqlString);
@@ -183,6 +190,7 @@ public class DBJCServlet extends HttpServlet {
 		out.println("<h2>DBJC Results Table:</h2>");
 		out.println("<p>Please use the back button to go back to the main page and refresh the page before doing another query.</p>");
 		out.println("<p>" + sqlString + "</p>");
+		printTable(out, sqlString);
 		if(!givesId) {
 			out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
 			out.println("<input type=\"hidden\" id=\"pubId\" name=\"pubId\" value=\"" + id + "\">");
@@ -193,6 +201,7 @@ public class DBJCServlet extends HttpServlet {
 			out.println("<input type=\"hidden\" id=\"sort\" name=\"sort\" value=\"" + sort + "\">");
 			out.println("<input type=\"hidden\" id=\"offset\" name=\"offset\" value=\"" + offset + "\">");
 			out.println("<input type=\"hidden\" id=\"limit\" name=\"limit\" value=\"" + limit + "\">");
+			out.println("<input type=\"hidden\" id=\"nRows\" name=\"nRows\" value=\"" + numRows + "\">");
 			out.println("<div class=\"container-fluid\"><div class=\"row\">");
 			if (Integer.parseInt(offset) == 0) {
 				out.println("<div class=\"col-md-1\">");
@@ -202,7 +211,7 @@ public class DBJCServlet extends HttpServlet {
 				out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"-" + limit + "\">Previous</button>");
 				out.println("</div>");
 			}
-			if (Integer.parseInt(offset) + Integer.parseInt(limit) > 90) {
+			if ((Integer.parseInt(offset) + Integer.parseInt(limit)) >= Integer.parseInt(numRows)) {
 				out.println("<div class=\"col-md-1 offset-md-10\">");
 				out.println("</div>");
 			} else {
@@ -213,7 +222,6 @@ public class DBJCServlet extends HttpServlet {
 			out.println("</div></div>");
 			out.println("</form>");
 		}
-		printTable(out, sqlString);
 		out.println("</body>");
 	}
 
@@ -229,6 +237,10 @@ public class DBJCServlet extends HttpServlet {
 	private void printTable(PrintWriter out, String sqlString) {
 		
 		try (ResultSet rs = stmt.executeQuery(sqlString)) {
+			rs.last();
+			numRows = Integer.parseInt(rs.getRow());
+			rs.first();
+			out.println(numRows + " rows returned.");
 			out.println("<table class=\"table\">");
 			out.println("<thead><tr>");
 			out.println("<th scope=\"col\">ID</th>");
@@ -242,7 +254,6 @@ public class DBJCServlet extends HttpServlet {
 
 			out.println("<tbody>");
 			while (rs.next()) {
-			
 				out.println("<tr>");
 				out.println("<td>" + rs.getString("publicationID") + "</td>");
 				out.println("<td>" + rs.getString("title") + "</td>");
