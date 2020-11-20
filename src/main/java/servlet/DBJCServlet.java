@@ -41,6 +41,7 @@ public class DBJCServlet extends HttpServlet {
 	static String BJS3 = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js";
 
 	private Boolean givesId = true;
+	private Boolean givesAuthor = false;
 	private String id = null;
 	private String author = null;
 	private String title = null;
@@ -91,6 +92,7 @@ public class DBJCServlet extends HttpServlet {
 			String iAuthor = request.getParameter("author");
 			if ((iAuthor != null) && (iAuthor.length() > 0)) {
 				author = iAuthor;
+				givesAuthor = true;
 				sqlString = "SELECT p.PublicationID, Title, Author, Year, Type, Summary, URL " +
 								"FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 				sqlString += " AND Author LIKE '%" + author + "%'";
@@ -114,7 +116,8 @@ public class DBJCServlet extends HttpServlet {
 				sqlString += " AND Type = '" + type + "'";
 			}
 						
-			sqlString += " GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
+			if (!givesAuthor)
+				sqlString += " GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 
 			String iSort = request.getParameter("sort");
 			if ((iSort != null) && (iSort.length() > 0)) {
@@ -152,7 +155,6 @@ public class DBJCServlet extends HttpServlet {
 
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(DISTINCT Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
 									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
-
 		printHead(out);
 		printBody(out, sqlString);
 		printTail(out);
@@ -174,6 +176,7 @@ public class DBJCServlet extends HttpServlet {
 		out.println("<body>");
 		out.println("<h2>DBJC Results Table:</h2>");
 		out.println("<p>Use the back button to go back to the main page.</p>");
+		out.println("<p>" + sqlString + "</p>");
 		if(!givesId) {
 			out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
 			out.println("<input type=\"hidden\" id=\"pubId\" name=\"pubId\" value=\"" + id + "\">");
