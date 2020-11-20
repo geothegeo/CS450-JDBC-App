@@ -215,7 +215,7 @@ public class DBJCServlet extends HttpServlet {
 	private void printBody (PrintWriter out, String sqlString) {
 		out.println("<body>");
 		out.println("<h2>DBJC Results Table:</h2>");
-		// out.println("<p>" + sqlString + "</p>");
+		out.println("<p>" + sqlString + "</p>");
 		if(Integer.parseInt(numRows) == 0) {
 			out.println("<p>There are no results to be returned.</p>");
 		} else {
