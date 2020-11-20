@@ -78,8 +78,8 @@ public class DBJCServlet extends HttpServlet {
   public void doPost (HttpServletRequest request, HttpServletResponse response)
      throws ServletException, IOException
   {
-		String sqlString = "SELECT p.PublicationID, Title, GROUP_CONCAT(DISTINCT Author ORDER BY Author ASC SEPARATOR ', ') AS Authors, " +
-									"Year, Type, Summary, URL FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
+		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
+									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 
    	String iId = request.getParameter("pubId");
 		if ((iId != null) && (iId.length() > 0)) {
@@ -153,7 +153,7 @@ public class DBJCServlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 
-		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(DISTINCT Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
+		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
 									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND Year = '2017' GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 		printHead(out);
 		printBody(out, sqlString);

@@ -32,14 +32,14 @@
       </div>
       <div class="form-group form-inline">
         <label for="type">Type: </label>
-        <select id="type" class="form-control">
+        <select id="type" class="form-control" name="type">
           <option value="short" selected>short</option>
           <option value="long">long</option>
         </select>
       </div>
       <div class="form-group form-inline">
         <label for="sort">Sorted By: </label>
-        <select id="sort" class="form-control">
+        <select id="sort" class="form-control" name="sort">
           <option value="Author" selected>author of publication</option>
           <option value="Title">title of publication</option>
           <option value="Year">year of publication</option>
@@ -47,7 +47,7 @@
       </div>
       <div class="form-group form-inline">
         <label for="limit">Record Per page: </label>
-        <select id="limit" class="form-control">
+        <select id="limit" class="form-control" name="limit">
           <option value="10" selected>10</option>
           <option value="25">25</option>
           <option value="50">50</option>
