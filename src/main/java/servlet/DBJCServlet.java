@@ -42,6 +42,7 @@ public class DBJCServlet extends HttpServlet {
 
 	private Boolean givesId = true;
 	private Boolean givesAuthor = false;
+	private Boolean firstSet = true;
 
 	private String id = null;
 	private String author = null;
@@ -50,6 +51,7 @@ public class DBJCServlet extends HttpServlet {
 	private String type = null;
 	private String sort = null;
 	private String offset = "0";
+
 	private String limit = null;
 	private String interval = null;
 	private String numRows = "0";
@@ -80,6 +82,7 @@ public class DBJCServlet extends HttpServlet {
   public void doPost (HttpServletRequest request, HttpServletResponse response)
      throws ServletException, IOException
   {
+	  	String limitString = "";
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
 									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 
@@ -126,7 +129,7 @@ public class DBJCServlet extends HttpServlet {
 				sort = iSort;	
 				if(sort.equals("Author") && !givesAuthor)
 					sort = "Authors";
-				sqlString += " ORDER BY " + sort + "";
+				sqlString += " ORDER BY " + sort;
 			}
 					
 			String iLimit = request.getParameter("limit");
@@ -137,15 +140,25 @@ public class DBJCServlet extends HttpServlet {
 					interval = iInterval;
 					offset = "" + (Integer.parseInt(offset) + Integer.parseInt(interval));
 				}
-				sqlString += " LIMIT " + offset + ", " + limit + "";
+				limitString += " LIMIT " + offset + ", " + limit;
 			}
 
 			String iNumRows = request.getParameter("nRows");
-			if ((iNumRows != null) && (iNumRows.length() > 0)) {
+			if (firstSet && (iNumRows != null) && (iNumRows.length() > 0)) {
 				numRows = iNumRows;	
-			}
-				
+				firstSet = false;
+			} else {
+				try (ResultSet rs = stmt.executeQuery(sqlString)) {
+					rs.last();
+					numRows = Integer.toString(rs.getRow() - 1);	
+				} 
+				catch (SQLException ex) {
+					out.println(ex.getMessage());
+				}
+			}		
 		}
+
+		sqlString += limitString;
 
      response.setContentType("text/html");
      PrintWriter out = response.getWriter();
@@ -165,9 +178,8 @@ public class DBJCServlet extends HttpServlet {
 		// String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
 		// 							" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND Year = '2017' GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
-									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND Type = 'long'" +
-									" GROUP BY Title, Type, Summary ORDER BY Authors LIMIT 0, 10";
-		
+									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND Year = '2017' AND Type = 'short'" +
+									" GROUP BY Title, Year, Type, Summary, URL, p.PublicationID ORDER BY Authors";		
 		printHead(out);
 		printBody(out, sqlString);
 		printTail(out);
@@ -185,11 +197,12 @@ public class DBJCServlet extends HttpServlet {
 		out.println("</head>");
 	}
 
-	private void printBody (PrintWriter out, String sqlString) {
+	private void printBody (PrintWriter out, String sqlString, String limitString) {
 		out.println("<body>");
 		out.println("<h2>DBJC Results Table:</h2>");
 		out.println("<p>Please use the back button to go back to the main page and refresh the page before doing another query.</p>");
 		out.println("<p>" + sqlString + "</p>");
+		out.println("<p>" + nRows + " rows returned.</p>");
 		printTable(out, sqlString);
 		if(!givesId) {
 			out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
@@ -237,10 +250,6 @@ public class DBJCServlet extends HttpServlet {
 	private void printTable(PrintWriter out, String sqlString) {
 		
 		try (ResultSet rs = stmt.executeQuery(sqlString)) {
-			rs.last();
-			numRows = Integer.toString(rs.getRow());
-			rs.first();
-			out.println(numRows + " rows returned.");
 			out.println("<table class=\"table\">");
 			out.println("<thead><tr>");
 			out.println("<th scope=\"col\">ID</th>");
