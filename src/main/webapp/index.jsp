@@ -8,7 +8,7 @@
     <style>
       body {
         padding: 5vh 70vw 5vh 5vw;
-        background-color: rgb(216, 216, 216);
+        background-color: rgb(233, 233, 233);
       }
       label {
         margin-right: 10px;
