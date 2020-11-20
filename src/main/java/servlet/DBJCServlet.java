@@ -218,10 +218,9 @@ public class DBJCServlet extends HttpServlet {
 		out.println("<p>" + sqlString + "</p>");
 		out.println("<p>" + numRows + " rows returned.</p>");
 		out.println("<p>Displaying results: " + (Integer.parseInt(offset) + 1) + " - ");
-		out.println(Math.min(Integer.parseInt(offset) + Integer.parseInt(limit), Integer.parseInt(numRows) - Integer.parseInt(offset)) + "</p>");
+		out.println(Math.min(Integer.parseInt(offset) + Integer.parseInt(limit), Integer.parseInt(numRows)) + "</p>");
 		if(!((id != null) && (id.length() > 0))) {
 			out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
-			out.println("<input type=\"hidden\" id=\"pubId\" name=\"pubId\" value=\"" + id + "\">");
 			out.println("<input type=\"hidden\" id=\"author\" name=\"author\" value=\"" + author + "\">");
 			out.println("<input type=\"hidden\" id=\"title\" name=\"title\" value=\"" + title + "\">");
 			out.println("<input type=\"hidden\" id=\"year\" name=\"year\" value=\"" + year + "\">");
@@ -302,12 +301,12 @@ public class DBJCServlet extends HttpServlet {
 			}
 			out.println("</tbody></table>");
 
-			try {
-				rs.close();
-				stmt.close();
-			} catch(SQLException e) {
-				out.println(e.getMessage());
-			}
+			// try {
+			// 	rs.close();
+			// 	stmt.close();
+			// } catch(SQLException e) {
+			// 	out.println(e.getMessage());
+			// }
 		} 
 		catch (SQLException ex) {
 			out.println(ex.getMessage());
