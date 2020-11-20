@@ -191,11 +191,9 @@ public class DBJCServlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 
-		// String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
-		// 							" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND Year = '2017' GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
-									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND Year = '2017' AND Type = 'short'" +
-									" GROUP BY Title, Year, Type, Summary, URL, p.PublicationID ORDER BY Authors";		
+									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND p.PublicationID = '1'" +
+									" GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";		
 		printHead(out);
 		printBody(out, sqlString);
 		printTail(out);
@@ -304,17 +302,16 @@ public class DBJCServlet extends HttpServlet {
 			}
 			out.println("</tbody></table>");
 
+			try {
+				rs.close();
+				stmt.close();
+			} catch(SQLException e) {
+				out.println(e.getMessage());
+			}
 		} 
 		catch (SQLException ex) {
 			out.println(ex.getMessage());
 		}
-
-		// try {
-		// 	rs.close();
-		// 	stmt.close();
-		// } catch(SQLException e) {
-		// 	System.out.println(e.getMessage());
-		// }
 
 	}
 }
