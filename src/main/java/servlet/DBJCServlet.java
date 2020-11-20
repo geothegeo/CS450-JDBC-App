@@ -126,7 +126,7 @@ public class DBJCServlet extends HttpServlet {
 				String iInterval = request.getParameter("interval");
 				if ((iInterval != null) && (iInterval.length() > 0)) {
 					interval = iInterval;
-					offset = Integer.parseInt(offset) + Integer.parseInt(interval));
+					offset = Integer.parseInt(offset) + Integer.parseInt(interval);
 				}
 				sqlString += " LIMIT " + offset + ", " + limit + "";
 			}
