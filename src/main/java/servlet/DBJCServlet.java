@@ -154,7 +154,7 @@ public class DBJCServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(DISTINCT Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
-									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
+									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND Year = '2017' GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 		printHead(out);
 		printBody(out, sqlString);
 		printTail(out);
@@ -175,7 +175,7 @@ public class DBJCServlet extends HttpServlet {
 	private void printBody (PrintWriter out, String sqlString) {
 		out.println("<body>");
 		out.println("<h2>DBJC Results Table:</h2>");
-		out.println("<p>Use the back button to go back to the main page.</p>");
+		out.println("<p>Please use the back button to go back to the main page and refresh the page before doing another query.</p>");
 		out.println("<p>" + sqlString + "</p>");
 		if(!givesId) {
 			out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
