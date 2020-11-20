@@ -7,7 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import java.util.*;
 import java.sql.*;
 
-import java.lang.math;
+import java.lang.Math;
 
 /*require mysql dependency in your pom.xml
  <dependencies>
@@ -219,7 +219,8 @@ public class DBJCServlet extends HttpServlet {
 		out.println("<p>Please use the back button to go back to the main page and refresh the page before doing another query.</p>");
 		out.println("<p>" + sqlString + "</p>");
 		out.println("<p>" + numRows + " rows returned.</p>");
-		out.println("<p>Displaying results: " + (offset + 1) + " - " + Math.min(offset + limit, numRows - offset) + "</p>");
+		out.println("<p>Displaying results: " + (Integer.parseInt(offset) + 1) + " - ");
+		out.println(Math.min(Integer.parseInt(offset) + Integer.parseInt(limit), Integer.parseInt(numRows) - Integer.parseInt(offset)) + "</p>");
 		if(!((id != null) && (id.length() > 0))) {
 			out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
 			out.println("<input type=\"hidden\" id=\"pubId\" name=\"pubId\" value=\"" + id + "\">");
