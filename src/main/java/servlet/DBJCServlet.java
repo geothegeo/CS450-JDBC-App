@@ -158,7 +158,9 @@ public class DBJCServlet extends HttpServlet {
 					interval = iInterval;
 				} else {
 					interval = limit;
+					offset = "-" + limit;
 				}
+				offset = "" + (Integer.parseInt(offset) + Integer.parseInt(interval));
 				limitString += " LIMIT " + offset + ", " + limit;
 			}
 
@@ -169,7 +171,7 @@ public class DBJCServlet extends HttpServlet {
 			} else {
 				try (ResultSet rs = stmt.executeQuery(sqlString)) {
 					rs.last();
-					numRows = Integer.toString(rs.getRow() - 1);	
+					numRows = Integer.toString(rs.getRow());	
 				} 
 				catch (SQLException ex) {
 					out.println(ex.getMessage());
@@ -230,6 +232,7 @@ public class DBJCServlet extends HttpServlet {
 			out.println("<input type=\"hidden\" id=\"type\" name=\"type\" value=\"" + type + "\">");
 			out.println("<input type=\"hidden\" id=\"sort\" name=\"sort\" value=\"" + sort + "\">");
 			
+			out.println("<input type=\"hidden\" id=\"offset\" name=\"offset\" value=\"" + offset + "\">");
 			out.println("<input type=\"hidden\" id=\"limit\" name=\"limit\" value=\"" + limit + "\">");
 			out.println("<input type=\"hidden\" id=\"nRows\" name=\"nRows\" value=\"" + numRows + "\">");
 
@@ -253,8 +256,6 @@ public class DBJCServlet extends HttpServlet {
 				out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"+" + limit + "\">Next</button>");
 				out.println("</div>");
 			}
-			offset = "" + (Integer.parseInt(offset) + Integer.parseInt(interval));
-			out.println("<input type=\"hidden\" id=\"offset\" name=\"offset\" value=\"" + offset + "\">");
 			out.println("</div></div>");
 			out.println("</form>");
 		}
