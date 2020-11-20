@@ -116,7 +116,7 @@ public class DBJCServlet extends HttpServlet {
 			if ((iAuthor != null) && (iAuthor.length() > 0)) {
 				author = iAuthor;
 				givesAuthor = 1;
-				sqlString = "SELECT p.PublicationID, Title, Author, Year, Type, Summary, URL " +
+				sqlString = "SELECT p.publicationID, Title, Author, Year, Type, Summary, URL " +
 								"FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 				sqlString += " AND Author LIKE '%" + author + "%'";
 			}
@@ -262,7 +262,8 @@ public class DBJCServlet extends HttpServlet {
 				out.println("</div></div>");
 				out.println("</form>");
 			}
-			out.println("<p>id: " + id + ", author: " + author + ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
+			out.println("<p>givesAuthor: " + givesAuthor + ", firstSet: " + firstSet + ", id: " + id + ", author: " + author 
+						+ ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
 						+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
 			printTable(out, sqlString);
 		}
