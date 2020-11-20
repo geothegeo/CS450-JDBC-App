@@ -7,6 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import java.util.*;
 import java.sql.*;
 
+import java.lang.math;
+
 /*require mysql dependency in your pom.xml
  <dependencies>
 ...
@@ -40,8 +42,8 @@ public class DBJCServlet extends HttpServlet {
 	static String BJS2 = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js";
 	static String BJS3 = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js";
 
-	private Boolean givesAuthor = false;
-	private Boolean firstSet = true;
+	private Integer givesAuthor = 0;
+	private Integer firstSet = 1;
 
 	private String id = null;
 	private String author = null;
@@ -88,6 +90,20 @@ public class DBJCServlet extends HttpServlet {
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
 									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 
+		String iBAuthor = request.getParameter("bAuthor");
+		if ((iBAuthor != null) && (iBAuthor.length() > 0)) {
+			givesAuthor = Integer.parseInt(iBAuthor);
+		}		
+
+		String iBSet = request.getParameter("bSet");
+		if ((iBSet != null) && (iBSet.length() > 0)) {
+			firstSet = Integer.parseInt(iBSet);
+		}
+
+		String iOffset = request.getParameter("offset");
+		if ((iOffset != null) && (iOffset.length() > 0)) {
+			offset = iOffset;
+		}
 
    	String iId = request.getParameter("pubId");
 		if ((iId != null) && (iId.length() > 0)) {
@@ -99,7 +115,7 @@ public class DBJCServlet extends HttpServlet {
 			String iAuthor = request.getParameter("author");
 			if ((iAuthor != null) && (iAuthor.length() > 0)) {
 				author = iAuthor;
-				givesAuthor = true;
+				givesAuthor = 1;
 				sqlString = "SELECT p.PublicationID, Title, Author, Year, Type, Summary, URL " +
 								"FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
 				sqlString += " AND Author LIKE '%" + author + "%'";
@@ -123,13 +139,13 @@ public class DBJCServlet extends HttpServlet {
 				sqlString += " AND Type = '" + type + "'";
 			}
 						
-			if (!givesAuthor)
+			if (givesAuthor == 0)
 				sqlString += " GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 
 			String iSort = request.getParameter("sort");
 			if ((iSort != null) && (iSort.length() > 0)) {
 				sort = iSort;	
-				if(sort.equals("Author") && !givesAuthor)
+				if(sort.equals("Author") && (givesAuthor == 0))
 					sort = "Authors";
 				sqlString += " ORDER BY " + sort;
 			}
@@ -144,13 +160,12 @@ public class DBJCServlet extends HttpServlet {
 					interval = limit;
 				}
 				limitString += " LIMIT " + offset + ", " + limit;
-				offset = "" + (Integer.parseInt(offset) + Integer.parseInt(interval));
 			}
 
 			String iNumRows = request.getParameter("nRows");
-			if (firstSet && (iNumRows != null) && (iNumRows.length() > 0)) {
+			if ((firstSet == 1) && (iNumRows != null) && (iNumRows.length() > 0)) {
 				numRows = iNumRows;	
-				firstSet = false;
+				firstSet = 0;
 			} else {
 				try (ResultSet rs = stmt.executeQuery(sqlString)) {
 					rs.last();
@@ -204,6 +219,7 @@ public class DBJCServlet extends HttpServlet {
 		out.println("<p>Please use the back button to go back to the main page and refresh the page before doing another query.</p>");
 		out.println("<p>" + sqlString + "</p>");
 		out.println("<p>" + numRows + " rows returned.</p>");
+		out.println("<p>Displaying results: " + (offset + 1) + " - " + Math.min(offset + limit, numRows - offset) + "</p>");
 		if(!((id != null) && (id.length() > 0))) {
 			out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
 			out.println("<input type=\"hidden\" id=\"pubId\" name=\"pubId\" value=\"" + id + "\">");
@@ -212,9 +228,13 @@ public class DBJCServlet extends HttpServlet {
 			out.println("<input type=\"hidden\" id=\"year\" name=\"year\" value=\"" + year + "\">");
 			out.println("<input type=\"hidden\" id=\"type\" name=\"type\" value=\"" + type + "\">");
 			out.println("<input type=\"hidden\" id=\"sort\" name=\"sort\" value=\"" + sort + "\">");
-			out.println("<input type=\"hidden\" id=\"offset\" name=\"offset\" value=\"" + offset + "\">");
+			
 			out.println("<input type=\"hidden\" id=\"limit\" name=\"limit\" value=\"" + limit + "\">");
 			out.println("<input type=\"hidden\" id=\"nRows\" name=\"nRows\" value=\"" + numRows + "\">");
+
+			out.println("<input type=\"hidden\" id=\"bAuthor\" name=\"bAuthor\" value=\"" + Integer.toString(givesAuthor)  + "\">");
+			out.println("<input type=\"hidden\" id=\"bSet\" name=\"bSet\" value=\"" + Integer.toString(firstSet) + "\">");
+
 			out.println("<div class=\"container-fluid\"><div class=\"row\">");
 			if (Integer.parseInt(offset) == 0) {
 				out.println("<div class=\"col-md-1\">");
@@ -232,9 +252,10 @@ public class DBJCServlet extends HttpServlet {
 				out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"+" + limit + "\">Next</button>");
 				out.println("</div>");
 			}
+			offset = "" + (Integer.parseInt(offset) + Integer.parseInt(interval));
+			out.println("<input type=\"hidden\" id=\"offset\" name=\"offset\" value=\"" + offset + "\">");
 			out.println("</div></div>");
 			out.println("</form>");
-
 		}
 		out.println("<p>id: " + id + ", author: " + author + ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
 					+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
@@ -270,7 +291,10 @@ public class DBJCServlet extends HttpServlet {
 				out.println("<tr>");
 				out.println("<td>" + rs.getString("publicationID") + "</td>");
 				out.println("<td>" + rs.getString("title") + "</td>");
-				out.println("<td>" + rs.getString("Authors") + "</td>");
+				if(givesAuthor == 0)
+					out.println("<td>" + rs.getString("Authors") + "</td>");
+				else
+					out.println("<td>" + rs.getString("Author") + "</td>");
 				out.println("<td>" + rs.getString("year") + "</td>");
 				out.println("<td>" + rs.getString("type") + "</td>");
 				out.println("<td>" + rs.getString("summary") + "</td>");
