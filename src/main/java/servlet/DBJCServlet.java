@@ -218,7 +218,7 @@ public class DBJCServlet extends HttpServlet {
 		out.println("<h2>DBJC Results Table:</h2>");
 		out.println("<p>Please use the back button to go back to the main page and refresh the page before doing another query.</p>");
 		out.println("<p>" + sqlString + "</p>");
-		if(numRows == 0) {
+		if(Integer.parseInt(numRows) == 0) {
 			out.println("<p>There are no results to be returned.</p>");
 		} else {
 			out.println("<p>" + numRows + " rows returned.</p>");
