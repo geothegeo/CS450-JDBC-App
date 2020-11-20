@@ -238,7 +238,7 @@ public class DBJCServlet extends HttpServlet {
 		
 		try (ResultSet rs = stmt.executeQuery(sqlString)) {
 			rs.last();
-			numRows = Integer.parseInt(rs.getRow());
+			numRows = Integer.toString(rs.getRow());
 			rs.first();
 			out.println(numRows + " rows returned.");
 			out.println("<table class=\"table\">");
