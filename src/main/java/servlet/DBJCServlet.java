@@ -88,7 +88,7 @@ public class DBJCServlet extends HttpServlet {
 
 	  	String limitString = "";
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
-									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
+									" FROM Authors a, Publications p WHERE a.PublicationID = p.PublicationID";
 
 		String iBAuthor = request.getParameter("bAuthor");
 		if ((iBAuthor != null) && (iBAuthor.length() > 0)) {
@@ -116,8 +116,8 @@ public class DBJCServlet extends HttpServlet {
 			if ((iAuthor != null) && (iAuthor.length() > 0)) {
 				author = iAuthor;
 				givesAuthor = 1;
-				sqlString = "SELECT p.publicationID, Title, Author, Year, Type, Summary, URL " +
-								"FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
+				sqlString = "SELECT p.PublicationID, Title, Author, Year, Type, Summary, URL " +
+								"FROM Authors a, Publications p WHERE a.PublicationID = p.PublicationID";
 				sqlString += " AND Author LIKE '%" + author + "%'";
 			}
 				
@@ -194,7 +194,7 @@ public class DBJCServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
-									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND p.PublicationID = '1'" +
+									" FROM Authors a, Publications p WHERE a.PublicationID = p.PublicationID AND p.PublicationID = '1'" +
 									" GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";		
 		printHead(out);
 		printBody(out, sqlString);
@@ -297,7 +297,7 @@ public class DBJCServlet extends HttpServlet {
 			out.println("<tbody>");
 			while (rs.next()) {
 				out.println("<tr>");
-				out.println("<td>" + rs.getString("publicationID") + "</td>");
+				out.println("<td>" + rs.getString("PublicationID") + "</td>");
 				out.println("<td>" + rs.getString("title") + "</td>");
 				if(givesAuthor == 0)
 					out.println("<td>" + rs.getString("Authors") + "</td>");
