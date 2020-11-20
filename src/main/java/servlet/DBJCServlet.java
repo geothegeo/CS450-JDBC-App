@@ -40,6 +40,7 @@ public class DBJCServlet extends HttpServlet {
 	static String BJS2 = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js";
 	static String BJS3 = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js";
 
+	private Boolean givesId = true;
 	private String id = null;
 	private String author = null;
 	private String title = null;
@@ -86,6 +87,7 @@ public class DBJCServlet extends HttpServlet {
 			sqlString += " GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 		}			
 		else {
+			givesId = false;
 			String iAuthor = request.getParameter("author");
 			if ((iAuthor != null) && (iAuthor.length() > 0)) {
 				author = iAuthor;
@@ -170,37 +172,38 @@ public class DBJCServlet extends HttpServlet {
 
 	private void printBody (PrintWriter out, String sqlString) {
 		out.println("<body>");
-		out.println("<p>");
-		out.println("Use the back button to go back to the main page.");
-		out.println("</p>");
-		out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\" onsubmit=\"return configForm()\"");
-		out.println("<input type=\"hidden\" id=\"pubId\" name=\"pubId\" value=\"" + id + "\">");
-		out.println("<input type=\"hidden\" id=\"author\" name=\"author\" value=\"" + author + "\">");
-		out.println("<input type=\"hidden\" id=\"title\" name=\"title\" value=\"" + title + "\">");
-		out.println("<input type=\"hidden\" id=\"year\" name=\"year\" value=\"" + year + "\">");
-		out.println("<input type=\"hidden\" id=\"type\" name=\"type\" value=\"" + type + "\">");
-		out.println("<input type=\"hidden\" id=\"sort\" name=\"sort\" value=\"" + sort + "\">");
-		out.println("<input type=\"hidden\" id=\"offset\" name=\"offset\" value=\"" + offset + "\">");
-		out.println("<input type=\"hidden\" id=\"limit\" name=\"limit\" value=\"" + limit + "\">");
-		out.println("<div class=\"container-fluid\"><div class=\"row\">");
-		if (Integer.parseInt(offset) == 0) {
-			out.println("<div class=\"col-md-1\">");
-			out.println("</div>");
-		} else {
-			out.println("<div class=\"col-md-1\">");
-			out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"-" + limit + "\">Previous</button>");
-			out.println("</div>");
+		out.println("<h2>DBJC Results Table:</h2>");
+		out.println("<p>Use the back button to go back to the main page.</p>");
+		if(!givesId) {
+			out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
+			out.println("<input type=\"hidden\" id=\"pubId\" name=\"pubId\" value=\"" + id + "\">");
+			out.println("<input type=\"hidden\" id=\"author\" name=\"author\" value=\"" + author + "\">");
+			out.println("<input type=\"hidden\" id=\"title\" name=\"title\" value=\"" + title + "\">");
+			out.println("<input type=\"hidden\" id=\"year\" name=\"year\" value=\"" + year + "\">");
+			out.println("<input type=\"hidden\" id=\"type\" name=\"type\" value=\"" + type + "\">");
+			out.println("<input type=\"hidden\" id=\"sort\" name=\"sort\" value=\"" + sort + "\">");
+			out.println("<input type=\"hidden\" id=\"offset\" name=\"offset\" value=\"" + offset + "\">");
+			out.println("<input type=\"hidden\" id=\"limit\" name=\"limit\" value=\"" + limit + "\">");
+			out.println("<div class=\"container-fluid\"><div class=\"row\">");
+			if (Integer.parseInt(offset) == 0) {
+				out.println("<div class=\"col-md-1\">");
+				out.println("</div>");
+			} else {
+				out.println("<div class=\"col-md-1\">");
+				out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"-" + limit + "\">Previous</button>");
+				out.println("</div>");
+			}
+			if (Integer.parseInt(offset) + Integer.parseInt(limit) > 90) {
+				out.println("<div class=\"col-md-1 offset-md-10\">");
+				out.println("</div>");
+			} else {
+				out.println("<div class=\"col-md-1 offset-md-10\">");
+				out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"+" + limit + "\">Next</button>");
+				out.println("</div>");
+			}
+			out.println("</div></div>");
+			out.println("</form>");
 		}
-		if (Integer.parseInt(offset) + Integer.parseInt(limit) > 90) {
-			out.println("<div class=\"col-md-1 offset-md-10\">");
-			out.println("</div>");
-		} else {
-			out.println("<div class=\"col-md-1 offset-md-10\">");
-			out.println("<button name=\"interval\" type=\"submit\" class=\"btn btn-primary\" value=\"+" + limit + "\">Next</button>");
-			out.println("</div>");
-		}
-    	out.println("</div></div>");
-    	out.println("</form>");
 		printTable(out, sqlString);
 		out.println("</body>");
 	}
