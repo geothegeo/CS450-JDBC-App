@@ -40,7 +40,6 @@ public class DBJCServlet extends HttpServlet {
 	static String BJS2 = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js";
 	static String BJS3 = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js";
 
-	private Boolean givesId = true;
 	private Boolean givesAuthor = false;
 	private Boolean firstSet = true;
 
@@ -97,7 +96,6 @@ public class DBJCServlet extends HttpServlet {
 			sqlString += " GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 		}			
 		else {
-			givesId = false;
 			String iAuthor = request.getParameter("author");
 			if ((iAuthor != null) && (iAuthor.length() > 0)) {
 				author = iAuthor;
@@ -142,9 +140,9 @@ public class DBJCServlet extends HttpServlet {
 				String iInterval = request.getParameter("interval");
 				if ((iInterval != null) && (iInterval.length() > 0)) {
 					interval = iInterval;
-					offset = "" + (Integer.parseInt(offset) + Integer.parseInt(interval));
 				}
 				limitString += " LIMIT " + offset + ", " + limit;
+				offset = "" + (Integer.parseInt(offset) + Integer.parseInt(interval));
 			}
 
 			String iNumRows = request.getParameter("nRows");
@@ -204,7 +202,7 @@ public class DBJCServlet extends HttpServlet {
 		out.println("<p>Please use the back button to go back to the main page and refresh the page before doing another query.</p>");
 		out.println("<p>" + sqlString + "</p>");
 		out.println("<p>" + numRows + " rows returned.</p>");
-		if(!givesId) {
+		if(!((id != null) && (id.length() > 0))) {
 			out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
 			out.println("<input type=\"hidden\" id=\"pubId\" name=\"pubId\" value=\"" + id + "\">");
 			out.println("<input type=\"hidden\" id=\"author\" name=\"author\" value=\"" + author + "\">");
@@ -234,9 +232,10 @@ public class DBJCServlet extends HttpServlet {
 			}
 			out.println("</div></div>");
 			out.println("</form>");
-			out.println("<p>id: " + id + ", author: " + author + ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
-			 					+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
+
 		}
+		out.println("<p>id: " + id + ", author: " + author + ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
+					+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
 		printTable(out, sqlString);
 		out.println("</body>");
 	}
