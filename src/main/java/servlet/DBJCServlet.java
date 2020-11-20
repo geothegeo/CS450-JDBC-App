@@ -204,7 +204,6 @@ public class DBJCServlet extends HttpServlet {
 		out.println("<p>Please use the back button to go back to the main page and refresh the page before doing another query.</p>");
 		out.println("<p>" + sqlString + "</p>");
 		out.println("<p>" + numRows + " rows returned.</p>");
-		printTable(out, sqlString);
 		if(!givesId) {
 			out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
 			out.println("<input type=\"hidden\" id=\"pubId\" name=\"pubId\" value=\"" + id + "\">");
@@ -235,7 +234,10 @@ public class DBJCServlet extends HttpServlet {
 			}
 			out.println("</div></div>");
 			out.println("</form>");
+			out.println("<p>id: " + id + ", author: " + author + ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
+			 					+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
 		}
+		printTable(out, sqlString);
 		out.println("</body>");
 	}
 
