@@ -140,6 +140,8 @@ public class DBJCServlet extends HttpServlet {
 				String iInterval = request.getParameter("interval");
 				if ((iInterval != null) && (iInterval.length() > 0)) {
 					interval = iInterval;
+				} else {
+					interval = limit;
 				}
 				limitString += " LIMIT " + offset + ", " + limit;
 				offset = "" + (Integer.parseInt(offset) + Integer.parseInt(interval));
