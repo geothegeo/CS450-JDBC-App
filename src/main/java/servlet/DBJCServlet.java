@@ -82,9 +82,13 @@ public class DBJCServlet extends HttpServlet {
   public void doPost (HttpServletRequest request, HttpServletResponse response)
      throws ServletException, IOException
   {
+     response.setContentType("text/html");
+     PrintWriter out = response.getWriter();
+
 	  	String limitString = "";
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
 									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID";
+
 
    	String iId = request.getParameter("pubId");
 		if ((iId != null) && (iId.length() > 0)) {
@@ -160,9 +164,6 @@ public class DBJCServlet extends HttpServlet {
 
 		sqlString += limitString;
 
-     response.setContentType("text/html");
-     PrintWriter out = response.getWriter();
-
 	  printHead(out);
 	  printBody(out, sqlString);
 	  printTail(out);
@@ -197,7 +198,7 @@ public class DBJCServlet extends HttpServlet {
 		out.println("</head>");
 	}
 
-	private void printBody (PrintWriter out, String sqlString, String limitString) {
+	private void printBody (PrintWriter out, String sqlString) {
 		out.println("<body>");
 		out.println("<h2>DBJC Results Table:</h2>");
 		out.println("<p>Please use the back button to go back to the main page and refresh the page before doing another query.</p>");
