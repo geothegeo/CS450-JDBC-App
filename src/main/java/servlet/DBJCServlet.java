@@ -122,7 +122,7 @@ public class DBJCServlet extends HttpServlet {
 			String iSort = request.getParameter("sort");
 			if ((iSort != null) && (iSort.length() > 0)) {
 				sort = iSort;	
-				if(sort.equals("Author") && givesAuthor)
+				if(sort.equals("Author") && !givesAuthor)
 					sort = "Authors";
 				sqlString += " ORDER BY " + sort + "";
 			}
@@ -159,7 +159,7 @@ public class DBJCServlet extends HttpServlet {
 		// 							" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND Year = '2017' GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
 									" FROM Authors a, Publications p WHERE a.publicationID = p.publicationID AND Year = '2017' AND Type = 'short'" +
-									" GROUP BY Title, Year, Type, Summary, URL, p.PublicationID ORDER BY Author LIMIT 0, 10";
+									" GROUP BY Title, Type, Summary, ORDER BY Authors LIMIT 0, 10";
 		
 		printHead(out);
 		printBody(out, sqlString);
