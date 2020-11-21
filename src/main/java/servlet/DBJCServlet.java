@@ -219,9 +219,10 @@ public class DBJCServlet extends HttpServlet {
 		if(Integer.parseInt(numRows) == 0) {
 			out.println("<p>There are no results to be returned.</p>");
 		} else {
-			out.println("<p>" + numRows + " rows returned.</p>");
+			out.println("<p>" + numRows + " rows returned</p>");
 			out.println("<p>Displaying results: " + (Integer.parseInt(offset) + 1) + " - ");
 			out.println(Math.min(Integer.parseInt(offset) + Integer.parseInt(limit), Integer.parseInt(numRows)) + "</p>");
+			out.println("<p>Order By: " + sort + "</p>");
 			// If no publicationID given, then display previous and next buttons for the limit queries
 			if(!((id != null) && (id.length() > 0))) {
 				out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
@@ -261,11 +262,11 @@ public class DBJCServlet extends HttpServlet {
 				out.println("</div></div>");
 				out.println("</form>");
 			}
-			out.println("<p>givesAuthor: " + givesAuthor + ", firstSet: " + firstSet + ", id: " + id + ", author: " + author 
-						+ ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
-						+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
-			printTable(out, sqlString);
 		}
+		out.println("<p>givesAuthor: " + givesAuthor + ", firstSet: " + firstSet + ", id: " + id + ", author: " + author 
+			+ ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
+			+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
+			printTable(out, sqlString);
 		reset();
 		out.println("</body>");
 	}
@@ -326,7 +327,6 @@ public class DBJCServlet extends HttpServlet {
 	private void reset() {
 		givesAuthor = 0;
 	   firstSet = 1;
-
 		id = null;
 		author = null;
 		title = null;
@@ -334,7 +334,6 @@ public class DBJCServlet extends HttpServlet {
 		type = null;
 		sort = null;
 		offset = "0";
-
 		limit = null;
 		interval = null;
 		numRows = "0";
