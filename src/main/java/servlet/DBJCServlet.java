@@ -52,7 +52,7 @@ public class DBJCServlet extends HttpServlet {
 	private String sort = null;
 	private String offset = "0";
 
-	private String limit = null;
+	private String limit = "0";
 	private String interval = null;
 	private String numRows = "0";
 
@@ -330,7 +330,7 @@ public class DBJCServlet extends HttpServlet {
 		type = null;
 		sort = null;
 		offset = "0";
-		limit = null;
+		limit = "0";
 		interval = null;
 		numRows = "0";
 	}
