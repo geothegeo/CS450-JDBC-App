@@ -261,7 +261,7 @@ public class DBJCServlet extends HttpServlet {
 		// out.println("<p>givesAuthor: " + givesAuthor + ", id: " + id + ", author: " + author 
 		// 	+ ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
 		// 	+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
-		// 	printTable(out, sqlString);
+		printTable(out, sqlString);
 		reset();
 		out.println("</body>");
 	}
