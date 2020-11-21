@@ -157,21 +157,21 @@ public class DBJCServlet extends HttpServlet {
 				offset = "" + (Integer.parseInt(offset) + Integer.parseInt(interval));
 				limitString += " LIMIT " + offset + ", " + limit;
 			}
-
-			String iNumRows = request.getParameter("nRows");
-			if ((iNumRows != null) && (iNumRows.length() > 0)) {
-				numRows = iNumRows;	
-			} else {
-				// Get total number of rows
-				try (ResultSet rs = stmt.executeQuery(sqlString)) {
-					rs.last();
-					numRows = Integer.toString(rs.getRow());	
-				} 
-				catch (SQLException ex) {
-					out.println(ex.getMessage());
-				}
-			}		
 		}
+
+		String iNumRows = request.getParameter("nRows");
+		if ((iNumRows != null) && (iNumRows.length() > 0)) {
+			numRows = iNumRows;	
+		} else {
+			// Get total number of rows
+			try (ResultSet rs = stmt.executeQuery(sqlString)) {
+				rs.last();
+				numRows = Integer.toString(rs.getRow());	
+			} 
+			catch (SQLException ex) {
+				out.println(ex.getMessage());
+			}
+		}	
 
 		// Append limiit here so previous numRows is the total and not "LIMITed"
 		sqlString += limitString;
