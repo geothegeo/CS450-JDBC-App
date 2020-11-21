@@ -210,7 +210,7 @@ public class DBJCServlet extends HttpServlet {
 	private void printBody (PrintWriter out, String sqlString) {
 		out.println("<body>");
 		out.println("<h2>DBJC Results Table:</h2>");
-		out.println("<p>Note: Use the back button to go back to the home page for another query.</p>");
+		out.println("<p>Note: Use the back button to go back to the home page for another query (Refresh not needed after).</p>");
 		// out.println("<p>" + sqlString + "</p>");
 		if(Integer.parseInt(numRows) == 0) {
 			out.println("<p>There are no results to be returned.</p>");
@@ -218,9 +218,9 @@ public class DBJCServlet extends HttpServlet {
 			out.println("<p>" + numRows + " rows returned</p>");
 			out.println("<p>Displaying results: " + (Integer.parseInt(offset) + 1) + " - ");
 			out.println(Math.min(Integer.parseInt(offset) + Integer.parseInt(limit), Integer.parseInt(numRows)) + "</p>");
-			out.println("<p>Order By: " + sort + "</p>");
 			// If no publicationID given, then ...
 			if(!((id != null) && (id.length() > 0))) {
+				out.println("<p>Order By: " + sort + "</p>");
 				// Set up POST var to be transferred over
 				out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
 				if(author != null)
@@ -257,11 +257,11 @@ public class DBJCServlet extends HttpServlet {
 				out.println("</div></div>");
 				out.println("</form>");
 			}
+			printTable(out, sqlString);
 		}
 		// out.println("<p>givesAuthor: " + givesAuthor + ", id: " + id + ", author: " + author 
 		// 	+ ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
 		// 	+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
-		printTable(out, sqlString);
 		reset();
 		out.println("</body>");
 	}

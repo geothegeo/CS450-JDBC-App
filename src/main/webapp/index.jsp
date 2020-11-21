@@ -60,7 +60,7 @@
     <br>
     <form id="idForm" method="post" action="https://cs450-jdbc.herokuapp.com/search">
       <div class="form-group form-inline">
-        <label for="pubId">Enter PublicationID: </label>
+        <label for="pubId">Enter Publication ID: </label>
         <input type="text" class="form-control" id="pubId" name="pubId">
       </div>
       <button class="btn btn-primary">Search </button>
