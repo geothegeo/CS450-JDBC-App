@@ -43,7 +43,6 @@ public class DBJCServlet extends HttpServlet {
 	static String BJS3 = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js";
 
 	private Integer givesAuthor = 0;
-	private Integer firstSet = 1;
 
 	private String id = null;
 	private String author = null;
@@ -90,32 +89,25 @@ public class DBJCServlet extends HttpServlet {
 		String sqlString = "SELECT p.PublicationID, Title, Year, Type, Summary, URL, GROUP_CONCAT(Author ORDER BY Author ASC SEPARATOR ', ') AS Authors" +
 									" FROM Authors a, Publications p WHERE a.PublicationID = p.PublicationID";
 
-		String iBAuthor = request.getParameter("bAuthor");
-		if ((iBAuthor != null) && (iBAuthor.length() > 0)) {
-			givesAuthor = Integer.parseInt(iBAuthor);
-		}		
-
-		String iBSet = request.getParameter("bSet");
-		if ((iBSet != null) && (iBSet.length() > 0)) {
-			firstSet = Integer.parseInt(iBSet);
-		}
-
 		String iOffset = request.getParameter("offset");
 		if ((iOffset != null) && (iOffset.length() > 0)) {
 			offset = iOffset;
 		}
 
+		// If publicationID give, extract and skip the rest
    	String iId = request.getParameter("pubId");
 		if ((iId != null) && (iId.length() > 0)) {
 			id = iId;
 			sqlString += " AND p.PublicationID = '" + id + "'";
 			sqlString += " GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
-		}			
+		} 
+		// Extract information based on what's given in the first half of the form
 		else {
 			String iAuthor = request.getParameter("author");
 			if ((iAuthor != null) && (iAuthor.length() > 0)) {
 				author = iAuthor;
 				givesAuthor = 1;
+				// Need to rewrite query to only display author as singular
 				sqlString = "SELECT p.PublicationID, Title, Author, Year, Type, Summary, URL " +
 								"FROM Authors a, Publications p WHERE a.PublicationID = p.PublicationID";
 				sqlString += " AND Author LIKE '%" + author + "%'";
@@ -138,21 +130,23 @@ public class DBJCServlet extends HttpServlet {
 				type = iType;	
 				sqlString += " AND Type = '" + type + "'";
 			}
-						
+			
+			// use GROUP BY so no MYSQL errors when using GROUP_CONCAT()
 			if (givesAuthor == 0)
 				sqlString += " GROUP BY Title, Year, Type, Summary, URL, p.PublicationID";
 
 			String iSort = request.getParameter("sort");
 			if ((iSort != null) && (iSort.length() > 0)) {
 				sort = iSort;	
-				if(sort.equals("Author") && (givesAuthor == 0))
+				if(givesAuthor == 0)
 					sort = "Authors";
 				sqlString += " ORDER BY " + sort;
 			}
-					
+				
 			String iLimit = request.getParameter("limit");
 			if ((iLimit != null) && (iLimit.length() > 0)) {
 				limit = iLimit;
+				// Apply previous, next button values to do limit math
 				String iInterval = request.getParameter("interval");
 				if ((iInterval != null) && (iInterval.length() > 0)) {
 					interval = iInterval;
@@ -165,10 +159,10 @@ public class DBJCServlet extends HttpServlet {
 			}
 
 			String iNumRows = request.getParameter("nRows");
-			if ((firstSet == 1) && (iNumRows != null) && (iNumRows.length() > 0)) {
+			if ((iNumRows != null) && (iNumRows.length() > 0)) {
 				numRows = iNumRows;	
-				firstSet = 0;
 			} else {
+				// Get total number of rows
 				try (ResultSet rs = stmt.executeQuery(sqlString)) {
 					rs.last();
 					numRows = Integer.toString(rs.getRow());	
@@ -179,6 +173,7 @@ public class DBJCServlet extends HttpServlet {
 			}		
 		}
 
+		// Append limiit here so previous numRows is the total and not "LIMITed"
 		sqlString += limitString;
 
 	  printHead(out);
@@ -215,7 +210,8 @@ public class DBJCServlet extends HttpServlet {
 	private void printBody (PrintWriter out, String sqlString) {
 		out.println("<body>");
 		out.println("<h2>DBJC Results Table:</h2>");
-		out.println("<p>" + sqlString + "</p>");
+		out.println("<p>Note: Use the back button to go back to the home page for another query.</p>");
+		// out.println("<p>" + sqlString + "</p>");
 		if(Integer.parseInt(numRows) == 0) {
 			out.println("<p>There are no results to be returned.</p>");
 		} else {
@@ -223,8 +219,9 @@ public class DBJCServlet extends HttpServlet {
 			out.println("<p>Displaying results: " + (Integer.parseInt(offset) + 1) + " - ");
 			out.println(Math.min(Integer.parseInt(offset) + Integer.parseInt(limit), Integer.parseInt(numRows)) + "</p>");
 			out.println("<p>Order By: " + sort + "</p>");
-			// If no publicationID given, then display previous and next buttons for the limit queries
+			// If no publicationID given, then ...
 			if(!((id != null) && (id.length() > 0))) {
+				// Set up POST var to be transferred over
 				out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
 				if(author != null)
 					out.println("<input type=\"hidden\" id=\"author\" name=\"author\" value=\"" + author + "\">");
@@ -239,9 +236,7 @@ public class DBJCServlet extends HttpServlet {
 				out.println("<input type=\"hidden\" id=\"limit\" name=\"limit\" value=\"" + limit + "\">");
 				out.println("<input type=\"hidden\" id=\"nRows\" name=\"nRows\" value=\"" + numRows + "\">");
 
-				out.println("<input type=\"hidden\" id=\"bAuthor\" name=\"bAuthor\" value=\"" + Integer.toString(givesAuthor)  + "\">");
-				out.println("<input type=\"hidden\" id=\"bSet\" name=\"bSet\" value=\"" + Integer.toString(firstSet) + "\">");
-
+				// Display previous and next buttons for the limit queries
 				out.println("<div class=\"container-fluid\"><div class=\"row\">");
 				if (Integer.parseInt(offset) == 0) {
 					out.println("<div class=\"col-md-1\">");
@@ -263,10 +258,10 @@ public class DBJCServlet extends HttpServlet {
 				out.println("</form>");
 			}
 		}
-		out.println("<p>givesAuthor: " + givesAuthor + ", firstSet: " + firstSet + ", id: " + id + ", author: " + author 
-			+ ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
-			+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
-			printTable(out, sqlString);
+		// out.println("<p>givesAuthor: " + givesAuthor + ", id: " + id + ", author: " + author 
+		// 	+ ", title: " + title + ", year " + year + ", type: " + type + ", sort: " + sort 
+		// 	+ ", offset: " + offset + ", limit: " + limit + ", numRows: " + numRows + ", interval: " + interval + "</p>");
+		// 	printTable(out, sqlString);
 		reset();
 		out.println("</body>");
 	}
@@ -279,10 +274,10 @@ public class DBJCServlet extends HttpServlet {
 		out.println("</html>");
 	}
 
-
 	private void printTable(PrintWriter out, String sqlString) {
 		
 		try (ResultSet rs = stmt.executeQuery(sqlString)) {
+			// table header
 			out.println("<table class=\"table\">");
 			out.println("<thead><tr>");
 			out.println("<th scope=\"col\">ID</th>");
@@ -294,6 +289,7 @@ public class DBJCServlet extends HttpServlet {
 			out.println("<th scope=\"col\">URL</th>");
 			out.println("</tr></thead>");
 
+			// table body content
 			out.println("<tbody>");
 			while (rs.next()) {
 				out.println("<tr>");
@@ -324,9 +320,9 @@ public class DBJCServlet extends HttpServlet {
 
 	}
 
+	// function to reset all variables between POSTs
 	private void reset() {
 		givesAuthor = 0;
-	   firstSet = 1;
 		id = null;
 		author = null;
 		title = null;
@@ -339,10 +335,3 @@ public class DBJCServlet extends HttpServlet {
 		numRows = "0";
 	}
 }
-
-		    
-			    
-				   
-				   
-			       
-
