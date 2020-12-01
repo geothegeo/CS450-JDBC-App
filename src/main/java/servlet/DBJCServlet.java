@@ -138,7 +138,7 @@ public class DBJCServlet extends HttpServlet {
 			String iSort = request.getParameter("sort");
 			if ((iSort != null) && (iSort.length() > 0)) {
 				sort = iSort;	
-				if(givesAuthor == 0)
+				if((sort.eqauls("Author")) && (givesAuthor == 0))
 					sort = "Authors";
 				sqlString += " ORDER BY " + sort;
 			}
