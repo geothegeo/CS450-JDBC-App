@@ -138,7 +138,7 @@ public class DBJCServlet extends HttpServlet {
 			String iSort = request.getParameter("sort");
 			if ((iSort != null) && (iSort.length() > 0)) {
 				sort = iSort;	
-				if((sort.eqauls("Author")) && (givesAuthor == 0))
+				if((sort.equals("Author")) && (givesAuthor == 0))
 					sort = "Authors";
 				sqlString += " ORDER BY " + sort;
 			}
@@ -220,7 +220,7 @@ public class DBJCServlet extends HttpServlet {
 			out.println(Math.min(Integer.parseInt(offset) + Integer.parseInt(limit), Integer.parseInt(numRows)) + "</p>");
 			// If no publicationID given, then ...
 			if(!((id != null) && (id.length() > 0))) {
-				out.println("<p>Order By: " + sort + "</p>");
+				out.println("<p>Sort By: " + sort + "</p>");
 				// Set up POST var to be transferred over
 				out.println("<form id=\"inputForm\" class=\"form-inline\" method=\"post\" action=\"" + Servlet + "\">");
 				if(author != null)
